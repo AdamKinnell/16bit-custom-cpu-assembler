@@ -1,15 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
-namespace Assembler
-{
-    class Program
-    {
-        static void Main(string[] args)
-        {
+namespace Assembler {
+    class Program {
+        // ReSharper disable once InconsistentNaming
+        private static void Main(string[] args) {
+
+            const string SOURCE_PATH = "../../source.asm";
+
+            try {
+                using (var source = new StreamReader(SOURCE_PATH)) {
+
+                    // Tokenize lines.
+                    // TODO
+
+                    // Tokenize instructions.
+                    // TODO
+
+                    // Resolve label addresses.
+                    // TODO
+
+                    // Assemble instructions.
+                    // TODO
+                }
+            } catch (Exception) {
+                Console.WriteLine("Unable to open file.");
+            }
+
+            Console.WriteLine("Goodbye World!");
+            Console.ReadKey();
         }
     }
 }
