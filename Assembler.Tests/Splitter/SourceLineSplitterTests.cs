@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Assembler.Splitter;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Assembler.Tests {
+namespace Assembler.Tests.Splitter {
     [TestClass]
     public class SourceLineSplitterTests {
 
@@ -46,6 +47,22 @@ namespace Assembler.Tests {
                     comment: "This is a comment"
                 ),
                 splitter.SplitLine("# This is a comment"));
+        }
+
+        [TestMethod]
+        public void TestInstructionCleanup() {
+            var splitter = new SourceLineSplitter();
+            var expected = new SourceLine(
+                label: null,
+                mnemonic: "and",
+                operands: "$t0 $t1",
+                comment: null
+            );
+            Assert.AreEqual(expected, splitter.SplitLine("and $t0 $t1"));
+            Assert.AreEqual(expected, splitter.SplitLine("and $t0  $t1"));
+            Assert.AreEqual(expected, splitter.SplitLine("and $t0, $t1"));
+            Assert.AreEqual(expected, splitter.SplitLine("and $t0 , $t1"));
+            Assert.AreEqual(expected, splitter.SplitLine("and $t0 ,$t1"));
         }
     }
 }

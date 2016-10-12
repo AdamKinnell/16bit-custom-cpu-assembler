@@ -1,10 +1,11 @@
 ﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 
 namespace Assembler {
     class Program {
         // ReSharper disable once InconsistentNaming
-        private static void Main(string[] args) {
+        private static void Main([NotNull] string[] args) {
 
             const string SOURCE_PATH = "../../source.asm";
 

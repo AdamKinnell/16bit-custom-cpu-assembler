@@ -2,7 +2,8 @@
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
-namespace Assembler {
+namespace Assembler.Splitter {
+
     /// <summary>
     ///     Splits a single line in a source file into it's constituent parts.
     /// </summary>

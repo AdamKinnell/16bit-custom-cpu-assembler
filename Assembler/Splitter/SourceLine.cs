@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Assembler {
+namespace Assembler.Splitter {
     /// <summary>
     ///     Represents the untokenized components of a source line.
     /// </summary>
@@ -18,13 +18,19 @@ namespace Assembler {
                           [CanBeNull] string mnemonic,
                           [CanBeNull] string operands,
                           [CanBeNull] string comment) {
+
+            // Perform sanity checks.
+            if ((mnemonic == null) && (operands != null)) {
+                throw new ArgumentException("Cannot have operands without mnemonic.", nameof(operands));
+            }
+
             Label    = label;
             Mnemonic = mnemonic;
             Operands = operands;
             Comment  = comment;
         }
 
-        // Fields /////////////////////////////////////////////////////////////
+        // Properties /////////////////////////////////////////////////////////
 
         public string Label    { get; }
         public string Mnemonic { get; }
