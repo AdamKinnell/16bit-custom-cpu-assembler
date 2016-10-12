@@ -8,10 +8,13 @@ namespace Assembler.Tokenizer {
     /// </summary>
     class OperandTokenizer {
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="operands"></param>
+        /// <returns></returns>
         [CanBeNull]
-        public InstructionOperands Tokenizer([NotNull] string operands) {
-
-
+        public IOperandList Tokenizer([NotNull] string operands) {
 
             /*
             for each possible format:

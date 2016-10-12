@@ -63,6 +63,53 @@ namespace Assembler.Tests.Splitter {
             Assert.AreEqual(expected, splitter.SplitLine("and $t0, $t1"));
             Assert.AreEqual(expected, splitter.SplitLine("and $t0 , $t1"));
             Assert.AreEqual(expected, splitter.SplitLine("and $t0 ,$t1"));
+            Assert.AreEqual(expected, splitter.SplitLine("and $t0,$t1"));
+        }
+        
+        [TestMethod]
+        public void TestImmediateOperands() {
+            var splitter = new SourceLineSplitter();
+
+            // Decimal
+            Assert.AreEqual(
+                new SourceLine(null, "add", "100", null),
+                splitter.SplitLine("add 100"),
+                "Decimal shall be an immediate");
+
+            // Hexadecimal
+            Assert.AreEqual(
+                new SourceLine(null, "add", "0x019ABCF", null),
+                splitter.SplitLine("add 0x019ABCF"),
+                "Hexadecimal shall be an immediate");
+
+            // Binary
+            Assert.AreEqual(
+                new SourceLine(null, "add", "0b10010101", null),
+                splitter.SplitLine("add 0b10010101"),
+                "Binary shall be an immediate");
+
+            // Label
+            Assert.AreEqual(
+                new SourceLine(null, "add", "main", null),
+                splitter.SplitLine("add main"),
+                "Label shall be an immediate");
+        }
+
+        [TestMethod]
+        public void TestFullLine() {
+            var splitter = new SourceLineSplitter();
+            var expected = new SourceLine(
+                label: "_MaiN_",
+                mnemonic: "AnD",
+                operands: "$t0 $t1 3260",
+                comment: ":$#$:comment:$#$:"
+            );
+            Assert.AreEqual(expected, splitter.SplitLine(
+                "_MaiN_: AnD $t0, $t1, 3260 #:$#$:comment:$#$:"));
+            Assert.AreEqual(expected, splitter.SplitLine(
+                "_MaiN_:AnD $t0,$t1,3260#:$#$:comment:$#$:"));
+            Assert.AreEqual(expected, splitter.SplitLine(
+                "_MaiN_  :  AnD  $t0  ,  $t1  ,  3260  #  :$#$:comment:$#$:"));
         }
     }
 }

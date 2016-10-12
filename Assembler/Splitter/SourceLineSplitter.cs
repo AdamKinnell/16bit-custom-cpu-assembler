@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Assembler.Constants;
 using JetBrains.Annotations;
 
 namespace Assembler.Splitter {
@@ -11,17 +12,7 @@ namespace Assembler.Splitter {
 
         // Constants //////////////////////////////////////////////////////////
 
-        private static readonly Regex SPLIT_REGEX = new Regex(
-            // Start
-            @"^" +
-            // Label
-            @"(?:([a-zA-Z][_a-zA-Z0-9]+?) ?:)? ?" +
-            // Instruction (Mnemonic + Operands)
-            @"(?:([a-zA-Z]+?)( .*?)?)??" +
-            // Comment
-            @" ?(?:#(.*))?" +
-            // End
-            @"$", RegexOptions.Compiled);
+        private static readonly Regex SPLIT_REGEX = new Regex(RegexDefinitions.SourceLine);
 
         // Functions //////////////////////////////////////////////////////////
 
@@ -48,8 +39,10 @@ namespace Assembler.Splitter {
         ///     The output of this function may be passed to a tokenizer
         ///     for further processing.
         /// </summary>
-        /// <returns> Null if the given line is malformed and cannot be split. </returns>
-        [CanBeNull]
+        /// <exception cref="ArgumentException">
+        ///     If the given line is malformed and cannot be split.
+        /// </exception>
+        [NotNull]
         public SourceLine SplitLine([NotNull] string line) {
             line = CleanupLine(line);
 
@@ -59,13 +52,13 @@ namespace Assembler.Splitter {
             var match = SPLIT_REGEX.Match(line);
             if (match.Success) {
                 return new SourceLine(
-                    label:    match.Groups[1].Success ? match.Groups[1].Value.Trim() : null,
-                    mnemonic: match.Groups[2].Success ? match.Groups[2].Value.Trim() : null,
-                    operands: match.Groups[3].Success ? match.Groups[3].Value.Trim() : null,
-                    comment:  match.Groups[4].Success ? match.Groups[4].Value.Trim() : null
+                    label:    match.Groups["label"].Success    ? match.Groups["label"].Value.Trim()    : null,
+                    mnemonic: match.Groups["mnemonic"].Success ? match.Groups["mnemonic"].Value.Trim() : null,
+                    operands: match.Groups["operands"].Success ? match.Groups["operands"].Value.Trim() : null,
+                    comment:  match.Groups["comment"].Success  ? match.Groups["comment"].Value.Trim()  : null
                 );
             } else {
-                return null;
+                throw new ArgumentException("Line is malformed.", nameof(line));
             }
         }
     }
