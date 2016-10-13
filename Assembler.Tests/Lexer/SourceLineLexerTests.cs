@@ -2,9 +2,9 @@
 using Assembler.Lexer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Assembler.Tests.Splitter {
+namespace Assembler.Tests.Lexer {
     [TestClass]
-    public class SourceLineSplitterTests {
+    public class SourceLineLexerTests {
 
         [TestMethod]
         public void TestEmptyLine() {

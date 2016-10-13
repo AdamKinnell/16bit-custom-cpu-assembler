@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -49,6 +50,7 @@ namespace Assembler.Lexer {
         public override bool Equals(object obj) => obj is SourceLine && Equals((SourceLine) obj);
 
         /// <inheritdoc />
+        [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
         protected bool Equals([NotNull] SourceLine other) =>
             String.Equals(Label, other.Label) &&
             String.Equals(Mnemonic, other.Mnemonic) &&
