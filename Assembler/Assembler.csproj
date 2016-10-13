@@ -58,8 +58,8 @@
     <Compile Include="Instructions\Operands\OperandTypes\RegisterOperandParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Splitter\SourceLineSplitter.cs" />
-    <Compile Include="Splitter\SourceLine.cs" />
+    <Compile Include="Lexer\SourceLineLexer.cs" />
+    <Compile Include="Lexer\SourceLine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Parser\" />
+    <Folder Include="Splitter\" />
     <Folder Include="Tokenizer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Assembler.Splitter;
+﻿using System;
+using Assembler.Lexer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Assembler.Tests.Splitter {
@@ -8,122 +8,105 @@ namespace Assembler.Tests.Splitter {
 
         [TestMethod]
         public void TestEmptyLine() {
-            var splitter = new SourceLineSplitter();
-            Assert.IsTrue(splitter.SplitLine("").IsEmpty);
-            Assert.IsTrue(splitter.SplitLine("    ").IsEmpty);
+            var splitter = new SourceLineLexer();
+            Assert.IsTrue(splitter.TokenizeLine("").IsEmpty);
+            Assert.IsTrue(splitter.TokenizeLine("    ").IsEmpty);
         }
 
         [TestMethod]
         public void TestSinglePartLine() {
-            var splitter = new SourceLineSplitter();
+            var splitter = new SourceLineLexer();
 
-            // Label Only
             Assert.AreEqual(
-                new SourceLine(
-                    label: "main",
-                    mnemonic: null,
-                    operands: null,
-                    comment: null
-                ),
-                splitter.SplitLine("main:"));
-
-            // Mnemonic Only
+                new SourceLine("main", null, null, null),
+                splitter.TokenizeLine("main:"));
             Assert.AreEqual(
-                new SourceLine(
-                    label: null,
-                    mnemonic: "add",
-                    operands: null,
-                    comment: null
-                ),
-                splitter.SplitLine("add"));
-
-            // Comment Only
+                new SourceLine(null, "add", null, null),
+                splitter.TokenizeLine("add"));
             Assert.AreEqual(
-                new SourceLine(
-                    label: null,
-                    mnemonic: null,
-                    operands: null,
-                    comment: "This is a comment"
-                ),
-                splitter.SplitLine("# This is a comment"));
+                new SourceLine(null, null, null, "This is a comment"),
+                splitter.TokenizeLine("# This is a comment"));
         }
 
         [TestMethod]
         public void TestFullLine() {
-            var splitter = new SourceLineSplitter();
+            var splitter = new SourceLineLexer();
             var expected = new SourceLine(
                 label: "_MaiN_",
                 mnemonic: "AnD",
-                operands: "$t0 $t1 3260",
+                operands: new[] {"$t0", "$t1", "3260"},
                 comment: ":$#$:comment:$#$:"
             );
             Assert.AreEqual(
                 expected,
-                splitter.SplitLine("_MaiN_: AnD $t0, $t1, 3260 #:$#$:comment:$#$:"));
+                splitter.TokenizeLine("_MaiN_: AnD $t0, $t1, 3260 #:$#$:comment:$#$:"));
             Assert.AreEqual(
                 expected,
-                splitter.SplitLine("_MaiN_:AnD $t0,$t1,3260#:$#$:comment:$#$:"));
+                splitter.TokenizeLine("_MaiN_:AnD $t0,$t1,3260#:$#$:comment:$#$:"));
             Assert.AreEqual(
                 expected,
-                splitter.SplitLine("  _MaiN_  :  AnD  $t0  ,  $t1  ,  3260  #  :$#$:comment:$#$:  "));
+                splitter.TokenizeLine("  _MaiN_  :  AnD  $t0  ,  $t1  ,  3260  #  :$#$:comment:$#$:  "));
         }
 
         [TestMethod]
         public void TestInstructionCleanup() {
-            var splitter = new SourceLineSplitter();
+            var splitter = new SourceLineLexer();
             var expected = new SourceLine(
                 label: null,
                 mnemonic: "and",
-                operands: "$t0 $t1",
+                operands: new[] {"$t0", "$t1"},
                 comment: null
             );
-            Assert.AreEqual(expected, splitter.SplitLine("and $t0 $t1"));
-            Assert.AreEqual(expected, splitter.SplitLine("and $t0  $t1"));
-            Assert.AreEqual(expected, splitter.SplitLine("and $t0, $t1"));
-            Assert.AreEqual(expected, splitter.SplitLine("and $t0 , $t1"));
-            Assert.AreEqual(expected, splitter.SplitLine("and $t0 ,$t1"));
-            Assert.AreEqual(expected, splitter.SplitLine("and $t0,$t1"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("and $t0 $t1"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("and $t0  $t1"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("and $t0, $t1"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("and $t0 , $t1"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("and $t0 ,$t1"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("and $t0,$t1"));
         }
 
         [TestMethod]
         public void TestImmediateOperands() {
-            var splitter = new SourceLineSplitter();
+            var splitter = new SourceLineLexer();
 
             // Decimal
             Assert.AreEqual(
-                new SourceLine(null, "add", "100", null),
-                splitter.SplitLine("add 100"),
+                new SourceLine(null, "add", new[] {"100"}, null),
+                splitter.TokenizeLine("add 100"),
                 "Decimal shall be an immediate");
 
             // Hexadecimal
             Assert.AreEqual(
-                new SourceLine(null, "add", "0x019ABCF", null),
-                splitter.SplitLine("add 0x019ABCF"),
+                new SourceLine(null, "add", new[] {"0x019ABCF"}, null),
+                splitter.TokenizeLine("add 0x019ABCF"),
                 "Hexadecimal shall be an immediate");
 
             // Binary
             Assert.AreEqual(
-                new SourceLine(null, "add", "0b10010101", null),
-                splitter.SplitLine("add 0b10010101"),
+                new SourceLine(null, "add", new[] {"0b10010101"}, null),
+                splitter.TokenizeLine("add 0b10010101"),
                 "Binary shall be an immediate");
 
             // Label
             Assert.AreEqual(
-                new SourceLine(null, "add", "main", null),
-                splitter.SplitLine("add main"),
+                new SourceLine(null, "add", new[] {"main"}, null),
+                splitter.TokenizeLine("add main"),
                 "Label shall be an immediate");
         }
 
         [TestMethod]
         public void TestBaseOffsetOperands() {
-            var splitter = new SourceLineSplitter();
+            var splitter = new SourceLineLexer();
+            var expected = new SourceLine(null, "sub", new[] {"0xffe($t0)"}, null);
 
-            Assert.AreEqual(
-                new SourceLine(null, "sub", "0xffe($t0)", null),
-                splitter.SplitLine("sub 0xffe($t0)"));
-            Assert.AreEqual(
-                new SourceLine(null, "sub", "0xffe ( $t0 )", null),
-                splitter.SplitLine("sub 0xffe ( $t0 ) "));
+            Assert.AreEqual(expected, splitter.TokenizeLine("sub 0xffe($t0)"));
+            Assert.AreEqual(expected, splitter.TokenizeLine("sub 0xffe ( $t0 ) "));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestInvalidLine() {
+            var splitter = new SourceLineLexer().TokenizeLine("67r56f");
         }
     }
 }

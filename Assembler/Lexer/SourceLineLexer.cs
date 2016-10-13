@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Assembler.Constants;
 using JetBrains.Annotations;
 
-namespace Assembler.Splitter {
+namespace Assembler.Lexer {
 
     /// <summary>
-    ///     Splits a single line in a source file into it's constituent parts.
+    ///     Converts a single source line to a tokenized string format.
     /// </summary>
-    public class SourceLineSplitter {
+    public class SourceLineLexer {
 
         // Constants //////////////////////////////////////////////////////////
 
-        private static readonly Regex SPLIT_REGEX = new Regex(RegexDefinitions.SourceLine);
+        private static readonly Regex SPLIT_REGEX = new Regex(RegexDefinitions.SourceLine, RegexOptions.Compiled);
 
         // Functions //////////////////////////////////////////////////////////
 
@@ -33,30 +34,41 @@ namespace Assembler.Splitter {
         }
 
         /// <summary>
+        ///     Tokenize operands from a match group.
+        /// </summary>
+        /// <param name="match_group"> </param>
+        [CanBeNull]
+        private string[] TokenizeOperands([CanBeNull] Group match_group) {
+            if ((match_group == null) || !match_group.Success) return null;
+            return match_group.Captures.Cast<Capture>()
+                .Select(cap => cap?.Value.Replace(" ", "")) // Remove all spaces.
+                .ToArray();
+        }
+
+        /// <summary>
         ///     Create a source line from the tokens in the match.
         /// </summary>
         [NotNull]
         private SourceLine CreateSourceLine([NotNull] Match match) {
-            var label = match.Groups["label"].Success ? match.Groups["label"].Value.Trim() : null;
+            var label    = match.Groups["label"].Success    ? match.Groups["label"].Value.Trim()    : null;
             var mnemonic = match.Groups["mnemonic"].Success ? match.Groups["mnemonic"].Value.Trim() : null;
-            var operands = match.Groups["operands"].Success ? match.Groups["operands"].Value.Trim() : null;
-            var comment = match.Groups["comment"].Success ? match.Groups["comment"].Value.Trim() : null;
-
+            var comment  = match.Groups["comment"].Success  ? match.Groups["comment"].Value.Trim()  : null;
+            var operands = TokenizeOperands(match.Groups["operand"]);
             return new SourceLine(label, mnemonic, operands, comment);
         }
 
         /// <summary>
         ///     Splits the given source line into strings,
-        ///     each representing a different part.
+        ///     each representing a different token of the input.
         /// 
-        ///     The output of this function may be passed to a tokenizer
+        ///     The output of this function may be passed to a parser
         ///     for further processing.
         /// </summary>
         /// <exception cref="ArgumentException">
-        ///     If the given line is malformed and cannot be split.
+        ///     If the given line is malformed and cannot be tokenized.
         /// </exception>
         [NotNull]
-        public SourceLine SplitLine([NotNull] string line) {
+        public SourceLine TokenizeLine([NotNull] string line) {
             line = CleanupLine(line);
 
             if (String.IsNullOrWhiteSpace(line))
