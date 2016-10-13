@@ -5,7 +5,7 @@ namespace Assembler.Instructions.Operands.OperandTypes {
     /// <summary>
     ///     Represents an operand specifying an immediate compile-time value.
     /// </summary>
-    public class ImmediateOperand {
+    public class ImmediateOperand : IOperand {
 
         // Constructors ///////////////////////////////////////////////////////
 
@@ -23,5 +23,6 @@ namespace Assembler.Instructions.Operands.OperandTypes {
         ///     The lower 16 bits specify the immediate value.
         /// </summary>
         public Int32 Value { get; }
+
     }
 }

@@ -24,23 +24,22 @@ namespace Assembler.Splitter {
                 throw new ArgumentException("Cannot have operands without mnemonic.", nameof(operands));
             }
 
-            Label    = label;
+            Label = label;
             Mnemonic = mnemonic;
             Operands = operands;
-            Comment  = comment;
+            Comment = comment;
         }
 
         // Properties /////////////////////////////////////////////////////////
-
-        public string Label    { get; }
-        public string Mnemonic { get; }
-        public string Operands { get; }
-        public string Comment  { get; }
+        [CanBeNull] public string Label { get; }
+        [CanBeNull] public string Mnemonic { get; }
+        [CanBeNull] public string Operands { get; }
+        [CanBeNull] public string Comment { get; }
 
         public bool HasInstruction => Mnemonic != null;
-        public bool HasComment     => Comment  != null;
-        public bool HasLabel       => Label    != null;
-        public bool IsEmpty        => (Label ?? Mnemonic ?? Operands ?? Comment) == null;
+        public bool HasComment => Comment != null;
+        public bool HasLabel => Label != null;
+        public bool IsEmpty => (Label ?? Mnemonic ?? Operands ?? Comment) == null;
 
         // Implemented Functions //////////////////////////////////////////////
 
@@ -49,10 +48,10 @@ namespace Assembler.Splitter {
 
         /// <inheritdoc />
         protected bool Equals([NotNull] SourceLine other) =>
-            String.Equals(Label,    other.Label)    &&
+            String.Equals(Label, other.Label) &&
             String.Equals(Mnemonic, other.Mnemonic) &&
             String.Equals(Operands, other.Operands) &&
-            String.Equals(Comment,  other.Comment);
+            String.Equals(Comment, other.Comment);
 
         /// <inheritdoc />
         public override int GetHashCode() {

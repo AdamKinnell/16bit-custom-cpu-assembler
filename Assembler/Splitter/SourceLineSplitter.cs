@@ -33,6 +33,19 @@ namespace Assembler.Splitter {
         }
 
         /// <summary>
+        ///     Create a source line from the tokens in the match.
+        /// </summary>
+        [NotNull]
+        private SourceLine CreateSourceLine([NotNull] Match match) {
+            var label = match.Groups["label"].Success ? match.Groups["label"].Value.Trim() : null;
+            var mnemonic = match.Groups["mnemonic"].Success ? match.Groups["mnemonic"].Value.Trim() : null;
+            var operands = match.Groups["operands"].Success ? match.Groups["operands"].Value.Trim() : null;
+            var comment = match.Groups["comment"].Success ? match.Groups["comment"].Value.Trim() : null;
+
+            return new SourceLine(label, mnemonic, operands, comment);
+        }
+
+        /// <summary>
         ///     Splits the given source line into strings,
         ///     each representing a different part.
         /// 
@@ -51,12 +64,7 @@ namespace Assembler.Splitter {
 
             var match = SPLIT_REGEX.Match(line);
             if (match.Success) {
-                return new SourceLine(
-                    label:    match.Groups["label"].Success    ? match.Groups["label"].Value.Trim()    : null,
-                    mnemonic: match.Groups["mnemonic"].Success ? match.Groups["mnemonic"].Value.Trim() : null,
-                    operands: match.Groups["operands"].Success ? match.Groups["operands"].Value.Trim() : null,
-                    comment:  match.Groups["comment"].Success  ? match.Groups["comment"].Value.Trim()  : null
-                );
+                return CreateSourceLine(match);
             } else {
                 throw new ArgumentException("Line is malformed.", nameof(line));
             }

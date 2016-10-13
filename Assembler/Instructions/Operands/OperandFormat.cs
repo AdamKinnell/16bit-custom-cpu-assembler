@@ -1,104 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Assembler.Constants;
+using Assembler.Instructions.Operands.OperandTypes;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions.Operands {
 
     /// <summary>
-    ///     All possible formats of instruction operands.
+    ///     Represents the expected or given format of a list of operands.
     /// </summary>
-    public enum OperandFormatType {
-        FormatEmpty, //   <MNEM>
-        Format1R, //      <MNEM> $A
-        Format2R, //      <MNEM> $A $B
-        Format1I, //      <MNEM> IMM
-        Format1R1I, //    <MNEM> $A IMM
-        Format2R1I, //    <MNEM> $A $B IMM
-        FormatOffset, //  <MNEM> IMM($B)
-        Format1ROffset // <MNEM> $A IMM($B)
-    }
+    public class OperandFormat {
 
-    /// <summary>
-    ///     Creates regular expressions to match an operand list.
-    /// </summary>
-    class OperandFormatRegexHelper {
+        // Constructors ///////////////////////////////////////////////////////
 
-        /// <summary> Represents the parts of an operand list. </summary>
-        public enum OperandParts {
-            Register,
-            Immediate,
-            BaseOffset
+        /// <summary>
+        ///     Construct from a list of operands.
+        /// </summary>
+        public OperandFormat([NotNull, ItemNotNull] IEnumerable<IOperand> operands) {
+            OperandTypes = operands.Select(operand => operand.GetType());
         }
 
-        /// <summary> Maps operand types to a regex that matches them. </summary>
-        private static readonly Dictionary<OperandParts, string> REGEX_MAPPINGS
-            = new Dictionary<OperandParts, string> {
-                {OperandParts.Register, RegexDefinitions.RegisterOperand},
-                {OperandParts.Immediate, RegexDefinitions.ImmediateOperand},
-                {OperandParts.BaseOffset, RegexDefinitions.BaseOffsetOperand},
-            };
-
         /// <summary>
-        ///     Compile a regex to match the given combination of operands.
+        ///     Construct directly from a list of types.
         /// </summary>
-        [NotNull]
-        public Regex CompileRegexFor([NotNull] OperandParts[] parts) {
-            var regex = String.Join(" ", parts.Select(part => REGEX_MAPPINGS[part]));
-            return new Regex('^' + regex + '$', RegexOptions.Compiled);
+        /// <param name="operand_types"> Must be subclasses of IOperand. </param>
+        /// <exception cref="ArgumentException"> If any type not subclass of IOperand. </exception>
+        // ReSharper disable once NotNullMemberIsNotInitialized
+        public OperandFormat([NotNull, ItemNotNull] IReadOnlyCollection<Type> operand_types) {
+            if (OperandTypes.Any(operand_type => !operand_type.IsSubclassOf(typeof(IOperand)))) {
+                throw new ArgumentException("Not a type of operand.", nameof(operand_types));
+            }
+            OperandTypes = operand_types;
         }
-    }
 
-    /// <summary>
-    ///     Represents a format of instruction operands.
-    /// </summary>
-    public interface IOperandFormat {
+        // Properties /////////////////////////////////////////////////////////
 
-        /// <summary>
-        ///     Check if the given string of operands
-        ///     is of this operand format, and an operand list
-        ///     of this type can be created.
-        /// </summary>
-        /// <param name="operands"> </param>
-        /// <returns> </returns>
-        bool IsOfFormat([NotNull] string operands);
+        [NotNull, ItemNotNull] public IEnumerable<Type> OperandTypes { get; }
 
-        /// <summary>
-        ///     Cre
-        /// </summary>
-        /// <returns> </returns>
-        [NotNull]
-        IOperandList CreateOperandList([NotNull] string operands);
-    }
-
-    /// <summary>
-    ///     Represents an empty set of operands.
-    /// </summary>
-    public class OperandFormatEmpty : IOperandFormat {
+        // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />
-        public bool IsOfFormat(string operands) => operands == "";
+        public override bool Equals(object obj) => obj is OperandFormat && Equals((OperandFormat) obj);
 
         /// <inheritdoc />
-        public IOperandList CreateOperandList(string operands) => new OperandListEmpty();
-    }
-
-    /// <summary>
-    ///     Represents a single register operand.
-    /// </summary>
-    public class OperandFormat1R : IOperandFormat {
-
-        private static readonly Regex REGEX = new OperandFormatRegexHelper().CompileRegexFor(
-            new[] {OperandFormatRegexHelper.OperandParts.Register});
+        protected bool Equals([NotNull] OperandFormat other) =>
+            OperandTypes.SequenceEqual(other.OperandTypes);
 
         /// <inheritdoc />
-        public bool IsOfFormat(string operands) => REGEX.IsMatch(operands);
-
-        /// <inheritdoc />
-        public IOperandList CreateOperandList(string operands) {
-            //return new OperandList1R();
+        public override int GetHashCode() {
+            throw new NotImplementedException();
         }
     }
 }

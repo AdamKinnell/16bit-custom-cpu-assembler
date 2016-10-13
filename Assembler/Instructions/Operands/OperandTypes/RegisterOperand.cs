@@ -6,7 +6,7 @@ namespace Assembler.Instructions.Operands.OperandTypes {
     /// <summary>
     ///     Represents an operand specifying a register.
     /// </summary>
-    public class RegisterOperand {
+    public class RegisterOperand : IOperand {
 
         // Constructors ///////////////////////////////////////////////////////
 
