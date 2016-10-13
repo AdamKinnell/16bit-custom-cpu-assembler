@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Assembler.Constants;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions.Operands {
@@ -32,22 +33,21 @@ namespace Assembler.Instructions.Operands {
             BaseOffset
         }
 
+        /// <summary> Maps operand types to a regex that matches them. </summary>
         private static readonly Dictionary<OperandParts, string> REGEX_MAPPINGS
             = new Dictionary<OperandParts, string> {
-                {OperandParts.Register, @"(\$[a-zA-Z0-9]+)"},
-                {OperandParts.Immediate, @"((?:0x|0b|)[0-9a-fA-F]+)"},
-                {OperandParts.BaseOffset, @"c"},
+                {OperandParts.Register, RegexDefinitions.RegisterOperand},
+                {OperandParts.Immediate, RegexDefinitions.ImmediateOperand},
+                {OperandParts.BaseOffset, RegexDefinitions.BaseOffsetOperand},
             };
 
         /// <summary>
-        /// 
+        ///     Compile a regex to match the given combination of operands.
         /// </summary>
-        /// <param name="parts"> </param>
-        /// <returns> </returns>
         [NotNull]
         public Regex CompileRegexFor([NotNull] OperandParts[] parts) {
             var regex = String.Join(" ", parts.Select(part => REGEX_MAPPINGS[part]));
-            return new Regex( '^' + regex + '$', RegexOptions.Compiled);
+            return new Regex('^' + regex + '$', RegexOptions.Compiled);
         }
     }
 
@@ -86,19 +86,19 @@ namespace Assembler.Instructions.Operands {
     }
 
     /// <summary>
-    /// 
+    ///     Represents a single register operand.
     /// </summary>
     public class OperandFormat1R : IOperandFormat {
 
-        private static readonly Regex regex
-            = new Regex(@"\$", RegexOptions.Compiled);
+        private static readonly Regex REGEX = new OperandFormatRegexHelper().CompileRegexFor(
+            new[] {OperandFormatRegexHelper.OperandParts.Register});
 
         /// <inheritdoc />
-        public bool IsOfFormat(string operands) => regex.IsMatch(operands);
+        public bool IsOfFormat(string operands) => REGEX.IsMatch(operands);
 
         /// <inheritdoc />
         public IOperandList CreateOperandList(string operands) {
-            throw new NotImplementedException();
+            //return new OperandList1R();
         }
     }
 }

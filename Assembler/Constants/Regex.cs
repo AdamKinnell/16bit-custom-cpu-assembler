@@ -16,11 +16,8 @@ namespace Assembler.Constants {
             => "(?:" + regex + ")?";
 
         /// <summary>
-        /// 
+        /// Make a named capture group for the givrn regex string.
         /// </summary>
-        /// <param name="regex"> </param>
-        /// <param name="name"> </param>
-        /// <returns> </returns>
         [NotNull]
         public static string MakeCapture([NotNull] string regex, [NotNull] string name)
             => @"(?<" + name + '>' + regex + @")";
@@ -100,7 +97,7 @@ namespace Assembler.Constants {
 
         // No capture groups.
         [NotNull] public static string BaseOffsetOperand
-            => $@"{ImmediateOperand} *\({RegisterOperand}\)";
+            => $@"{ImmediateOperand} *\( *{RegisterOperand} *\)";
 
         // Comment ////////////////////////////////////////////////////////////
 

@@ -7,7 +7,6 @@ namespace Assembler.Tests.Splitter {
     public class SourceLineSplitterTests {
 
         [TestMethod]
-        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public void TestEmptyLine() {
             var splitter = new SourceLineSplitter();
             Assert.IsTrue(splitter.SplitLine("").IsEmpty);
@@ -50,6 +49,26 @@ namespace Assembler.Tests.Splitter {
         }
 
         [TestMethod]
+        public void TestFullLine() {
+            var splitter = new SourceLineSplitter();
+            var expected = new SourceLine(
+                label: "_MaiN_",
+                mnemonic: "AnD",
+                operands: "$t0 $t1 3260",
+                comment: ":$#$:comment:$#$:"
+            );
+            Assert.AreEqual(
+                expected,
+                splitter.SplitLine("_MaiN_: AnD $t0, $t1, 3260 #:$#$:comment:$#$:"));
+            Assert.AreEqual(
+                expected,
+                splitter.SplitLine("_MaiN_:AnD $t0,$t1,3260#:$#$:comment:$#$:"));
+            Assert.AreEqual(
+                expected,
+                splitter.SplitLine("  _MaiN_  :  AnD  $t0  ,  $t1  ,  3260  #  :$#$:comment:$#$:  "));
+        }
+
+        [TestMethod]
         public void TestInstructionCleanup() {
             var splitter = new SourceLineSplitter();
             var expected = new SourceLine(
@@ -65,7 +84,7 @@ namespace Assembler.Tests.Splitter {
             Assert.AreEqual(expected, splitter.SplitLine("and $t0 ,$t1"));
             Assert.AreEqual(expected, splitter.SplitLine("and $t0,$t1"));
         }
-        
+
         [TestMethod]
         public void TestImmediateOperands() {
             var splitter = new SourceLineSplitter();
@@ -96,20 +115,15 @@ namespace Assembler.Tests.Splitter {
         }
 
         [TestMethod]
-        public void TestFullLine() {
+        public void TestBaseOffsetOperands() {
             var splitter = new SourceLineSplitter();
-            var expected = new SourceLine(
-                label: "_MaiN_",
-                mnemonic: "AnD",
-                operands: "$t0 $t1 3260",
-                comment: ":$#$:comment:$#$:"
-            );
-            Assert.AreEqual(expected, splitter.SplitLine(
-                "_MaiN_: AnD $t0, $t1, 3260 #:$#$:comment:$#$:"));
-            Assert.AreEqual(expected, splitter.SplitLine(
-                "_MaiN_:AnD $t0,$t1,3260#:$#$:comment:$#$:"));
-            Assert.AreEqual(expected, splitter.SplitLine(
-                "_MaiN_  :  AnD  $t0  ,  $t1  ,  3260  #  :$#$:comment:$#$:"));
+
+            Assert.AreEqual(
+                new SourceLine(null, "sub", "0xffe($t0)", null),
+                splitter.SplitLine("sub 0xffe($t0)"));
+            Assert.AreEqual(
+                new SourceLine(null, "sub", "0xffe ( $t0 )", null),
+                splitter.SplitLine("sub 0xffe ( $t0 ) "));
         }
     }
 }
