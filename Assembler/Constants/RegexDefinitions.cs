@@ -16,11 +16,18 @@ namespace Assembler.Constants {
             => "(?:" + regex + ")?";
 
         /// <summary>
-        /// Make a named capture group for the givrn regex string.
+        ///     Make a named capture group for the givrn regex string.
         /// </summary>
         [NotNull]
         public static string MakeCapture([NotNull] string regex, [NotNull] string name)
             => @"(?<" + name + '>' + regex + @")";
+
+        /// <summary>
+        ///     Make the regular expression match the whole input string.
+        /// </summary>
+        [NotNull]
+        public static string WholeInput([NotNull] string regex)
+            => '^' + regex + '$';
 
         // Line ///////////////////////////////////////////////////////////////
 
@@ -30,11 +37,11 @@ namespace Assembler.Constants {
         // 1 named capture group per operand: "operand"
         // Named capture group: "comment"
         [NotNull] public static string SourceLine
-            => '^'
-            + MakeOptional(LabelDefinition + @" *")
-            + MakeOptional(Instruction)
-            + MakeOptional(@" *" + Comment)
-            + '$';
+            => WholeInput(
+                MakeOptional(LabelDefinition + @" *") +
+                MakeOptional(Instruction) +
+                MakeOptional(@" *" + Comment)
+            );
 
         // Label //////////////////////////////////////////////////////////////
 
@@ -85,7 +92,7 @@ namespace Assembler.Constants {
 
         // No capture groups.
         [NotNull] public static string DecimalImmediate
-            => @"[0-9]+";
+            => @"-?[0-9]+";
 
         // No capture groups.
         [NotNull] public static string HexImmediate

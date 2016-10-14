@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 
 namespace Assembler.Instructions.Operands.Types {
 
@@ -23,5 +24,18 @@ namespace Assembler.Instructions.Operands.Types {
         ///     The lower 16 bits specify the immediate value.
         /// </summary>
         public Int32 Value { get; }
+
+        // Implemented Functions //////////////////////////////////////////////
+
+        /// <inheritdoc />
+        public override bool Equals(object obj) =>
+            obj is ImmediateOperand && Equals((ImmediateOperand) obj);
+
+        /// <inheritdoc />
+        protected bool Equals([NotNull] ImmediateOperand other) =>
+            Value == other.Value;
+
+        /// <inheritdoc />
+        public override int GetHashCode() => Value;
     }
 }

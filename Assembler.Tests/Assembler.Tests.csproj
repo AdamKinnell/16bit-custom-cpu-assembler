@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Parser\Operand\ImmediateOperandParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lexer\Scanner\SourceLineScannerTests.cs" />
   </ItemGroup>

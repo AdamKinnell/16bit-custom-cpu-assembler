@@ -55,7 +55,7 @@ namespace Assembler.Parser.Operand {
                 register = register.Substring(1); // Remove '$'
 
             // Attempt to resolve register number.
-            RegisterOperand operand = null;
+            RegisterOperand operand;
             if ((operand = TryParseAsNumber(register)) != null)
                 return operand;
             if ((operand = TryParseAsName(register)) != null)
