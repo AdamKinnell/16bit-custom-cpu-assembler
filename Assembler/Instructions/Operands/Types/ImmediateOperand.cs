@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assembler.Instructions.Operands.OperandTypes {
+namespace Assembler.Instructions.Operands.Types {
 
     /// <summary>
     ///     Represents an operand specifying an immediate compile-time value.
@@ -23,6 +23,5 @@ namespace Assembler.Instructions.Operands.OperandTypes {
         ///     The lower 16 bits specify the immediate value.
         /// </summary>
         public Int32 Value { get; }
-
     }
 }

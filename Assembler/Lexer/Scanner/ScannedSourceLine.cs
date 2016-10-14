@@ -3,20 +3,21 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Assembler.Lexer {
+namespace Assembler.Lexer.Scanner {
+
     /// <summary>
-    ///     Represents the tokenized components of a source line.
+    ///     Represents the scanned components of a source line.
     /// </summary>
-    public class SourceLine {
+    public class ScannedSourceLine {
 
         // Static Functions ///////////////////////////////////////////////////
 
         [NotNull]
-        public static SourceLine CreateEmpty() => new SourceLine(null, null, null, null);
+        public static ScannedSourceLine CreateEmpty() => new ScannedSourceLine(null, null, null, null);
 
         // Constructors ///////////////////////////////////////////////////////
 
-        public SourceLine([CanBeNull] string label,
+        public ScannedSourceLine([CanBeNull] string label,
                           [CanBeNull] string mnemonic,
                           [CanBeNull] string[] operands,
                           [CanBeNull] string comment) {
@@ -33,10 +34,10 @@ namespace Assembler.Lexer {
         }
 
         // Properties /////////////////////////////////////////////////////////
-        [CanBeNull] public string Label { get; }
-        [CanBeNull] public string Mnemonic { get; }
+        [CanBeNull] public string Label      { get; }
+        [CanBeNull] public string Mnemonic   { get; }
         [CanBeNull] public string[] Operands { get; }
-        [CanBeNull] public string Comment { get; }
+        [CanBeNull] public string Comment    { get; }
 
         public bool HasLabel       => Label != null;
         public bool HasInstruction => Mnemonic != null;
@@ -47,11 +48,11 @@ namespace Assembler.Lexer {
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => obj is SourceLine && Equals((SourceLine) obj);
+        public override bool Equals(object obj) => obj is ScannedSourceLine && Equals((ScannedSourceLine) obj);
 
         /// <inheritdoc />
         [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute")]
-        protected bool Equals([NotNull] SourceLine other) =>
+        protected bool Equals([NotNull] ScannedSourceLine other) =>
             String.Equals(Label, other.Label) &&
             String.Equals(Mnemonic, other.Mnemonic) &&
             (((Operands == null) && (other.Operands == null)) || Operands.SequenceEqual(other.Operands)) &&

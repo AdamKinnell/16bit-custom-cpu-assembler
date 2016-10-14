@@ -1,37 +1,37 @@
 ﻿using System;
-using Assembler.Lexer;
+using Assembler.Lexer.Scanner;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Assembler.Tests.Lexer {
+namespace Assembler.Tests.Lexer.Scanner {
     [TestClass]
-    public class SourceLineLexerTests {
+    public class SourceLineScannerTests {
 
         [TestMethod]
         public void TestEmptyLine() {
-            var splitter = new SourceLineLexer();
+            var splitter = new SourceLineScanner();
             Assert.IsTrue(splitter.TokenizeLine("").IsEmpty);
             Assert.IsTrue(splitter.TokenizeLine("    ").IsEmpty);
         }
 
         [TestMethod]
         public void TestSinglePartLine() {
-            var splitter = new SourceLineLexer();
+            var splitter = new SourceLineScanner();
 
             Assert.AreEqual(
-                new SourceLine("main", null, null, null),
+                new ScannedSourceLine("main", null, null, null),
                 splitter.TokenizeLine("main:"));
             Assert.AreEqual(
-                new SourceLine(null, "add", null, null),
+                new ScannedSourceLine(null, "add", null, null),
                 splitter.TokenizeLine("add"));
             Assert.AreEqual(
-                new SourceLine(null, null, null, "This is a comment"),
+                new ScannedSourceLine(null, null, null, "This is a comment"),
                 splitter.TokenizeLine("# This is a comment"));
         }
 
         [TestMethod]
         public void TestFullLine() {
-            var splitter = new SourceLineLexer();
-            var expected = new SourceLine(
+            var splitter = new SourceLineScanner();
+            var expected = new ScannedSourceLine(
                 label: "_MaiN_",
                 mnemonic: "AnD",
                 operands: new[] {"$t0", "$t1", "3260"},
@@ -50,8 +50,8 @@ namespace Assembler.Tests.Lexer {
 
         [TestMethod]
         public void TestInstructionCleanup() {
-            var splitter = new SourceLineLexer();
-            var expected = new SourceLine(
+            var splitter = new SourceLineScanner();
+            var expected = new ScannedSourceLine(
                 label: null,
                 mnemonic: "and",
                 operands: new[] {"$t0", "$t1"},
@@ -67,37 +67,37 @@ namespace Assembler.Tests.Lexer {
 
         [TestMethod]
         public void TestImmediateOperands() {
-            var splitter = new SourceLineLexer();
+            var splitter = new SourceLineScanner();
 
             // Decimal
             Assert.AreEqual(
-                new SourceLine(null, "add", new[] {"100"}, null),
+                new ScannedSourceLine(null, "add", new[] {"100"}, null),
                 splitter.TokenizeLine("add 100"),
                 "Decimal shall be an immediate");
 
             // Hexadecimal
             Assert.AreEqual(
-                new SourceLine(null, "add", new[] {"0x019ABCF"}, null),
+                new ScannedSourceLine(null, "add", new[] {"0x019ABCF"}, null),
                 splitter.TokenizeLine("add 0x019ABCF"),
                 "Hexadecimal shall be an immediate");
 
             // Binary
             Assert.AreEqual(
-                new SourceLine(null, "add", new[] {"0b10010101"}, null),
+                new ScannedSourceLine(null, "add", new[] {"0b10010101"}, null),
                 splitter.TokenizeLine("add 0b10010101"),
                 "Binary shall be an immediate");
 
             // Label
             Assert.AreEqual(
-                new SourceLine(null, "add", new[] {"main"}, null),
+                new ScannedSourceLine(null, "add", new[] {"main"}, null),
                 splitter.TokenizeLine("add main"),
                 "Label shall be an immediate");
         }
 
         [TestMethod]
         public void TestBaseOffsetOperands() {
-            var splitter = new SourceLineLexer();
-            var expected = new SourceLine(null, "sub", new[] {"0xffe($t0)"}, null);
+            var splitter = new SourceLineScanner();
+            var expected = new ScannedSourceLine(null, "sub", new[] {"0xffe($t0)"}, null);
 
             Assert.AreEqual(expected, splitter.TokenizeLine("sub 0xffe($t0)"));
             Assert.AreEqual(expected, splitter.TokenizeLine("sub 0xffe ( $t0 ) "));
@@ -106,7 +106,7 @@ namespace Assembler.Tests.Lexer {
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestInvalidLine() {
-            var splitter = new SourceLineLexer().TokenizeLine("67r56f");
+            var splitter = new SourceLineScanner().TokenizeLine("67r56f");
         }
     }
 }

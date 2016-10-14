@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Assembler.Constants;
+using Assembler.Instructions.Operands.Types;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions.Operands.OperandTypes {
+namespace Assembler.Parser.Operand {
 
     /// <summary>
     ///     Parses a register operand as specified in the source code.

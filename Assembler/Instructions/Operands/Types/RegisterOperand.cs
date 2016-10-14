@@ -1,7 +1,7 @@
 ﻿using System;
 using Assembler.Constants;
 
-namespace Assembler.Instructions.Operands.OperandTypes {
+namespace Assembler.Instructions.Operands.Types {
 
     /// <summary>
     ///     Represents an operand specifying a register.

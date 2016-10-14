@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Assembler.Instructions.Operands.OperandTypes;
+using Assembler.Instructions.Operands.Types;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions.Operands {
