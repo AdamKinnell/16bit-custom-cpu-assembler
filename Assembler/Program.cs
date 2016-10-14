@@ -12,7 +12,7 @@ namespace Assembler {
             try {
                 using (var source = new StreamReader(SOURCE_PATH)) {
 
-                    // Tokenize lines.
+                    // Read lines.
                     // TODO
 
                     // Tokenize instructions.

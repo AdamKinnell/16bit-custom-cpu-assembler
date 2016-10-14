@@ -1,5 +1,6 @@
 ﻿using System;
 using Assembler.Constants;
+using JetBrains.Annotations;
 
 namespace Assembler.Instructions.Operands.Types {
 
@@ -28,5 +29,18 @@ namespace Assembler.Instructions.Operands.Types {
         ///     The lower 4 bits specify the register number.
         /// </summary>
         public Int32 RegisterNumber { get; }
+
+        // Implemented Functions //////////////////////////////////////////////
+
+        /// <inheritdoc />
+        public override bool Equals(object obj) =>
+            obj is RegisterOperand && Equals((RegisterOperand) obj);
+
+        /// <inheritdoc />
+        protected bool Equals([NotNull] RegisterOperand other) =>
+            RegisterNumber == other.RegisterNumber;
+
+        /// <inheritdoc />
+        public override int GetHashCode() => RegisterNumber;
     }
 }

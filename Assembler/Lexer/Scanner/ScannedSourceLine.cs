@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace Assembler.Lexer.Scanner {
 
     /// <summary>
-    ///     Represents the scanned components of a source line.
+    ///     Represents the logical components of a source line in string format.
     /// </summary>
     public class ScannedSourceLine {
 
