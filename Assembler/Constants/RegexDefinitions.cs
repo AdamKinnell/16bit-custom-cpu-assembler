@@ -53,7 +53,7 @@ namespace Assembler.Constants {
         [NotNull] public static string LabelDefinition
             => MakeCapture(LabelName, "label") + @" *:";
 
-        // Instruction ////////////////////////////////////////////////////////
+        // SourceInstruction ////////////////////////////////////////////////////////
 
         // Named capture group: "mnemonic"
         // Named capture group: "operands"

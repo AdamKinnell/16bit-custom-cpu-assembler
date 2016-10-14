@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Assembler.Instructions.Operands.Types;
 using JetBrains.Annotations;
 
@@ -8,6 +10,12 @@ namespace Assembler.Instructions.Operands {
     ///     Represents a list of zero or more operands.
     /// </summary>
     public class OperandList {
+
+        // Static Functions ///////////////////////////////////////////////////
+
+        [NotNull]
+        public static OperandList CreateEmpty()
+            => new OperandList();
 
         // Constructors ///////////////////////////////////////////////////////
 
@@ -20,6 +28,13 @@ namespace Assembler.Instructions.Operands {
             Format = new OperandFormat(operands);
         }
 
+        /// <summary>
+        ///     Construct from a variable number of arguments.
+        /// </summary>
+        /// <param name="operands"> Order matters. </param>
+        public OperandList([NotNull] params IOperand[] operands)
+            : this((IReadOnlyCollection<IOperand>) operands) {}
+
         // Properties /////////////////////////////////////////////////////////
 
         /// <summary> Get the operands in the list. </summary>
@@ -27,5 +42,24 @@ namespace Assembler.Instructions.Operands {
 
         /// <summary> Get the format of the operands. </summary>
         [NotNull] public OperandFormat Format { get; }
+
+        // Implemented Functions //////////////////////////////////////////////
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+            => obj is OperandList && Equals((OperandList) obj);
+
+        /// <inheritdoc />
+        protected bool Equals([NotNull] OperandList other) {
+            if (Operands.Count != other.Operands.Count) return false;
+            if (Operands.Count == 0) return true;
+            return Operands.Zip(other.Operands, (x, y) => x.Equals(y))
+                           .Aggregate((x, y) => x && y);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode() {
+            throw new NotImplementedException();
+        }
     }
 }

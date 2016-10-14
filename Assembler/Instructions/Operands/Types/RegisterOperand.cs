@@ -33,12 +33,12 @@ namespace Assembler.Instructions.Operands.Types {
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />
-        public override bool Equals(object obj) =>
-            obj is RegisterOperand && Equals((RegisterOperand) obj);
+        public override bool Equals(object obj)
+            => obj is RegisterOperand && Equals((RegisterOperand) obj);
 
         /// <inheritdoc />
-        protected bool Equals([NotNull] RegisterOperand other) =>
-            RegisterNumber == other.RegisterNumber;
+        protected bool Equals([NotNull] RegisterOperand other)
+            => RegisterNumber == other.RegisterNumber;
 
         /// <inheritdoc />
         public override int GetHashCode() => RegisterNumber;

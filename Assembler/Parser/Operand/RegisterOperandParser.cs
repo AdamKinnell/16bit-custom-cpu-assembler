@@ -19,7 +19,7 @@ namespace Assembler.Parser.Operand {
         /// <returns> Null if the register could not be parsed as a number. </returns>
         [CanBeNull]
         private RegisterOperand TryParseAsNumber([NotNull] string register) {
-            var num = -1;
+            int num;
             if (int.TryParse(register, out num) &&
                 Registers.IsValidRegisterNumber(num)) {
                 return new RegisterOperand(num);

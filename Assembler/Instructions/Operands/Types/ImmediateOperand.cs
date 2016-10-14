@@ -28,12 +28,12 @@ namespace Assembler.Instructions.Operands.Types {
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />
-        public override bool Equals(object obj) =>
-            obj is ImmediateOperand && Equals((ImmediateOperand) obj);
+        public override bool Equals(object obj)
+            => obj is ImmediateOperand && Equals((ImmediateOperand) obj);
 
         /// <inheritdoc />
-        protected bool Equals([NotNull] ImmediateOperand other) =>
-            Value == other.Value;
+        protected bool Equals([NotNull] ImmediateOperand other)
+            => Value == other.Value;
 
         /// <inheritdoc />
         public override int GetHashCode() => Value;

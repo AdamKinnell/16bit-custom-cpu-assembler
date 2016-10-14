@@ -40,11 +40,12 @@ namespace Assembler.Instructions.Operands {
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />
-        public override bool Equals(object obj) => obj is OperandFormat && Equals((OperandFormat) obj);
+        public override bool Equals(object obj)
+            => obj is OperandFormat && Equals((OperandFormat) obj);
 
         /// <inheritdoc />
-        protected bool Equals([NotNull] OperandFormat other) =>
-            OperandTypes.SequenceEqual(other.OperandTypes);
+        protected bool Equals([NotNull] OperandFormat other)
+            => OperandTypes.SequenceEqual(other.OperandTypes);
 
         /// <inheritdoc />
         public override int GetHashCode() {

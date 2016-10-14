@@ -50,20 +50,20 @@
   <ItemGroup>
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
+    <Compile Include="Instructions\SourceInstruction.cs" />
     <Compile Include="Instructions\Operands\OperandFormat.cs" />
     <Compile Include="Instructions\Operands\OperandList.cs" />
     <Compile Include="Instructions\Operands\Types\ImmediateOperand.cs" />
-    <Compile Include="Lexer\Evaluator\EvaluatedSourceLine.cs" />
-    <Compile Include="Lexer\Evaluator\SourceLineEvaluator.cs" />
     <Compile Include="Lexer\SourceLineLexer.cs" />
+    <Compile Include="Lexer\Tokenizer\SourceLineTokenizer.cs" />
+    <Compile Include="Lexer\Tokenizer\TokenizedSourceLine.cs" />
     <Compile Include="Parser\Operand\ImmediateOperandParser.cs" />
     <Compile Include="Instructions\Operands\Types\IOperand.cs" />
     <Compile Include="Instructions\Operands\Types\RegisterOperand.cs" />
+    <Compile Include="Parser\Operand\OperandParser.cs" />
     <Compile Include="Parser\Operand\RegisterOperandParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Lexer\Scanner\SourceLineScanner.cs" />
-    <Compile Include="Lexer\Scanner\ScannedSourceLine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
