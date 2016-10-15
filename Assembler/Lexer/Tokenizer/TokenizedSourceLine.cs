@@ -1,5 +1,6 @@
 ﻿using System;
 using Assembler.Instructions;
+using Assembler.Label;
 using JetBrains.Annotations;
 
 namespace Assembler.Lexer.Tokenizer {
@@ -12,35 +13,40 @@ namespace Assembler.Lexer.Tokenizer {
         // Static Functions ///////////////////////////////////////////////////
 
         [NotNull]
-        public static TokenizedSourceLine CreateEmpty() => new TokenizedSourceLine(null, null);
+        public static TokenizedSourceLine CreateEmpty()
+            => new TokenizedSourceLine();
 
         // Constructors ///////////////////////////////////////////////////////
 
         /// <summary>
-        ///     Construct with all components.
+        ///     Construct with optional label definition and instruction.
         /// </summary>
-        /// <param name="label"> </param>
-        /// <param name="instruction"> </param>
-        public TokenizedSourceLine([CanBeNull] string label,
-                                   [CanBeNull] SourceInstruction instruction) {
+        public TokenizedSourceLine([CanBeNull] LabelDefinition label = null,
+                                   [CanBeNull] SourceInstruction instruction = null) {
             Label = label;
             Instruction = instruction;
         }
 
         /// <summary>
-        ///     Construct just from an instruction.
+        ///     Construct with only a label.
+        /// </summary>
+        public TokenizedSourceLine([NotNull] LabelDefinition label)
+            : this(label, null) {}
+
+        /// <summary>
+        ///     Construct with only an instruction.
         /// </summary>
         public TokenizedSourceLine([NotNull] SourceInstruction instruction)
             : this(null, instruction) {}
 
         // Properties /////////////////////////////////////////////////////////
 
-        [CanBeNull] public string Label { get; }
+        [CanBeNull] public LabelDefinition Label { get; }
         [CanBeNull] public SourceInstruction Instruction { get; }
 
-        public bool HasLabel       => Label != null;
+        public bool HasLabel => Label != null;
         public bool HasInstruction => Instruction != null;
-        public bool IsEmpty        => !HasLabel && !HasInstruction;
+        public bool IsEmpty => !HasLabel && !HasInstruction;
 
         // Implemented Functions //////////////////////////////////////////////
 

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Assembler.Constants;
 using Assembler.Instructions;
 using Assembler.Instructions.Operands;
+using Assembler.Label;
 using Assembler.Parser.Operand;
 using JetBrains.Annotations;
 
@@ -74,7 +75,9 @@ namespace Assembler.Lexer.Tokenizer {
         /// </summary>
         [NotNull]
         private TokenizedSourceLine CreateSourceLine([NotNull] Match match) {
-            var label = GetMatchGroupValue(match, "label");
+            var label_name = GetMatchGroupValue(match, "label");
+            var label = label_name == null ? null
+                : new LabelDefinition(label_name);
 
             var mnemonic = GetMatchGroupValue(match, "mnemonic");
             var operands = TokenizeOperands(match.Groups["operand"]);

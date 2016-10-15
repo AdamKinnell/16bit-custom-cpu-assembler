@@ -2,6 +2,7 @@
 using Assembler.Constants;
 using Assembler.Instructions;
 using Assembler.Instructions.Operands.Types;
+using Assembler.Label;
 using Assembler.Lexer.Tokenizer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -20,7 +21,7 @@ namespace Assembler.Tests.Lexer.Tokenizer {
 
         [TestMethod]
         public void GivenOnlyLabel_TokenizeLine_ReturnsOnlyLabel()
-            => Assert.AreEqual(new TokenizedSourceLine("main", null),
+            => Assert.AreEqual(new TokenizedSourceLine(new LabelDefinition("main")),
                                new SourceLineTokenizer().TokenizeLine("main:"));
 
         [TestMethod]
@@ -29,10 +30,10 @@ namespace Assembler.Tests.Lexer.Tokenizer {
                                new SourceLineTokenizer().TokenizeLine("add"));
 
         [TestMethod]
-        public void TestFullLine() {
+        public void GivenAllLineComponents_TokenizeLine_Succeeds() {
             var splitter = new SourceLineTokenizer();
             var expected = new TokenizedSourceLine(
-                label: "_MaiN_",
+                label: new LabelDefinition("_MaiN_"),
                 instruction: new SourceInstruction(
                     "AnD",
                     new RegisterOperand(Registers.RegisterNumber.T0),

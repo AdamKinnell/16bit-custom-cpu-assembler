@@ -58,6 +58,7 @@
     <Compile Include="Lexer\SourceLineLexer.cs" />
     <Compile Include="Lexer\Tokenizer\SourceLineTokenizer.cs" />
     <Compile Include="Lexer\Tokenizer\TokenizedSourceLine.cs" />
+    <Compile Include="Label\LabelDefinition.cs" />
     <Compile Include="Parser\Operand\BaseOffsetOperandParser.cs" />
     <Compile Include="Parser\Operand\ImmediateOperandParser.cs" />
     <Compile Include="Instructions\Operands\Types\IOperand.cs" />
