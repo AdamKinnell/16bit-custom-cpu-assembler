@@ -41,28 +41,19 @@ namespace Assembler.Parser.Operand {
         }
 
         /// <summary>
-        ///     Parse the given register specification string as an operand.
+        ///     Attempt to parse the given register specification string as an operand.
         /// </summary>
-        /// <param name="register"> Should start with '$' </param>
-        /// <exception cref="ArgumentException"> If no valid register is specified. </exception>
-        [NotNull]
-        public RegisterOperand Parse([NotNull] string register) {
-
-            // Ensure we've been given a register.
-            if (register.First() != '$')
-                throw new ArgumentException("No register specified; needs '$'.", nameof(register));
-            else
+        /// <param name="register"> </param>
+        /// <returns> Null if no valid register is specified. </returns>
+        [CanBeNull]
+        public RegisterOperand TryParse([NotNull] string register) {
+            if (register.First() == '$') {
                 register = register.Substring(1); // Remove '$'
-
-            // Attempt to resolve register number.
-            RegisterOperand operand;
-            if ((operand = TryParseAsNumber(register)) != null)
-                return operand;
-            if ((operand = TryParseAsName(register)) != null)
-                return operand;
-
-            // Invalid; could not parse register.
-            throw new ArgumentException("The specified register does not exist.", nameof(register));
+                return TryParseAsNumber(register) ??
+                    TryParseAsName(register);
+            } else {
+                return null;
+            }
         }
     }
 }

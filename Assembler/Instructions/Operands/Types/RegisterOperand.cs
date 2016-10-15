@@ -20,6 +20,13 @@ namespace Assembler.Instructions.Operands.Types {
             if (!Registers.IsValidRegisterNumber(register_number))
                 throw new ArgumentException("Not a valid register number.", nameof(register_number));
 
+            RegisterNumber = (Registers.RegisterNumber) register_number;
+        }
+
+        /// <summary>
+        ///     Construct a new register operand from it's enum value.
+        /// </summary>
+        public RegisterOperand(Registers.RegisterNumber register_number) {
             RegisterNumber = register_number;
         }
 
@@ -28,7 +35,7 @@ namespace Assembler.Instructions.Operands.Types {
         /// <summary>
         ///     The lower 4 bits specify the register number.
         /// </summary>
-        public Int32 RegisterNumber { get; }
+        public Registers.RegisterNumber RegisterNumber { get; }
 
         // Implemented Functions //////////////////////////////////////////////
 
@@ -41,6 +48,7 @@ namespace Assembler.Instructions.Operands.Types {
             => RegisterNumber == other.RegisterNumber;
 
         /// <inheritdoc />
-        public override int GetHashCode() => RegisterNumber;
+        public override int GetHashCode()
+            => (int) RegisterNumber;
     }
 }

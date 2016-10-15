@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
+    <Compile Include="Instructions\Operands\Types\BaseOffsetOperand.cs" />
     <Compile Include="Instructions\SourceInstruction.cs" />
     <Compile Include="Instructions\Operands\OperandFormat.cs" />
     <Compile Include="Instructions\Operands\OperandList.cs" />
@@ -57,6 +58,7 @@
     <Compile Include="Lexer\SourceLineLexer.cs" />
     <Compile Include="Lexer\Tokenizer\SourceLineTokenizer.cs" />
     <Compile Include="Lexer\Tokenizer\TokenizedSourceLine.cs" />
+    <Compile Include="Parser\Operand\BaseOffsetOperandParser.cs" />
     <Compile Include="Parser\Operand\ImmediateOperandParser.cs" />
     <Compile Include="Instructions\Operands\Types\IOperand.cs" />
     <Compile Include="Instructions\Operands\Types\RegisterOperand.cs" />
@@ -67,9 +69,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Resources\data.bin" />
     <None Include="packages.config" />
+    <None Include="Resources\text.bin" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\source.asm" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

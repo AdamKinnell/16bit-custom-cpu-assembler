@@ -81,23 +81,14 @@ namespace Assembler.Parser.Operand {
         }
 
         /// <summary>
-        ///     Parse the given immediate value string as an operand.
+        ///     Attempt to parse the given immediate value string as an operand.
         /// </summary>
-        /// <exception cref="ArgumentException"> If no valid immediate specified. </exception>
-        [NotNull]
-        public ImmediateOperand Parse([NotNull] string immediate) {
-            var operand =
-                TryParseAsLabel(immediate) ??
-                TryParseAsDecimal(immediate) ??
-                TryParseAsHex(immediate) ??
-                TryParseAsBinary(immediate);
-
-            if (operand == null) {
-                throw new ArgumentException("Could not evaluate as immediate.",
-                                            nameof(immediate));
-            } else {
-                return operand;
-            }
-        }
+        /// <returns> Null if no valid immediate is specified. </returns>
+        [CanBeNull]
+        public ImmediateOperand TryParse([NotNull] string immediate) =>
+            TryParseAsLabel(immediate) ??
+            TryParseAsDecimal(immediate) ??
+            TryParseAsHex(immediate) ??
+            TryParseAsBinary(immediate);
     }
 }

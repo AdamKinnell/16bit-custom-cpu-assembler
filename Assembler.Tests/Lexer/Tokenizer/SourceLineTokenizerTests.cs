@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using Assembler.Constants;
 using Assembler.Instructions;
 using Assembler.Instructions.Operands.Types;
@@ -12,28 +11,29 @@ namespace Assembler.Tests.Lexer.Tokenizer {
     public class SourceLineTokenizerTests {
 
         [TestMethod]
-        public void TestEmptyLine() {
-            var splitter = new SourceLineTokenizer();
-            Assert.IsTrue(splitter.TokenizeLine("").IsEmpty);
-            Assert.IsTrue(splitter.TokenizeLine("    ").IsEmpty);
-        }
+        public void GivenEmptyLine_TokenizeLine_ReturnsEmptyLine()
+            => Assert.IsTrue(new SourceLineTokenizer().TokenizeLine("").IsEmpty);
 
-        [TestMethod, SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
-        public void TestSinglePartLine() {
-            var splitter = new SourceLineTokenizer();
+        [TestMethod]
+        public void GivenWhitespaceLine_TokenizeLine_ReturnsEmptyLine()
+            => Assert.IsTrue(new SourceLineTokenizer().TokenizeLine("    ").IsEmpty);
 
-            Assert.AreEqual(
-                new TokenizedSourceLine("main", null, null),
-                splitter.TokenizeLine("main:"));
-            Assert.AreEqual(
-                new TokenizedSourceLine(new SourceInstruction("add")),
-                splitter.TokenizeLine("add"));
-            Assert.AreEqual(
-                new TokenizedSourceLine(null, null, "This is a comment"),
-                splitter.TokenizeLine("# This is a comment"));
-        }
+        [TestMethod]
+        public void GivenOnlyLabel_TokenizeLine_ReturnsOnlyLabel()
+            => Assert.AreEqual(new TokenizedSourceLine("main", null, null),
+                               new SourceLineTokenizer().TokenizeLine("main:"));
 
-        [TestMethod, SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
+        [TestMethod]
+        public void GivenOnlyMnemonic_TokenizeLine_ReturnsOnlyMnemonic()
+            => Assert.AreEqual(new TokenizedSourceLine(new SourceInstruction("add")),
+                               new SourceLineTokenizer().TokenizeLine("add"));
+
+        [TestMethod]
+        public void GivenOnlyComment_TokenizeLine_ReturnsOnlyComment()
+            => Assert.AreEqual(new TokenizedSourceLine(null, null, "This is a comment"),
+                               new SourceLineTokenizer().TokenizeLine("# This is a comment"));
+
+        [TestMethod]
         public void TestFullLine() {
             var splitter = new SourceLineTokenizer();
             var expected = new TokenizedSourceLine(
@@ -41,8 +41,8 @@ namespace Assembler.Tests.Lexer.Tokenizer {
                 comment: ":$#$:comment:$#$:",
                 instruction: new SourceInstruction(
                     "AnD",
-                    new RegisterOperand(Registers.NameToNumber("t0").Value),
-                    new RegisterOperand(Registers.NameToNumber("t1").Value),
+                    new RegisterOperand(Registers.RegisterNumber.T0),
+                    new RegisterOperand(Registers.RegisterNumber.T1),
                     new ImmediateOperand(3260)
                 )
             );
@@ -57,15 +57,15 @@ namespace Assembler.Tests.Lexer.Tokenizer {
                 splitter.TokenizeLine("  _MaiN_  :  AnD  $t0  ,  $t1  ,  3260  #  :$#$:comment:$#$:  "));
         }
 
-        [TestMethod, SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
-        public void TestInstructionCleanup() {
+        [TestMethod]
+        public void GivenInstructionWithExtraFormatting_TokenizeLine_Succeeds() {
             var splitter = new SourceLineTokenizer();
             var expected = new TokenizedSourceLine(
                 label: null, comment: null, instruction:
                 new SourceInstruction(
                     "and",
-                    new RegisterOperand(Registers.NameToNumber("t0").Value),
-                    new RegisterOperand(Registers.NameToNumber("t1").Value)
+                    new RegisterOperand(Registers.RegisterNumber.T0),
+                    new RegisterOperand(Registers.RegisterNumber.T1)
                 )
             );
 
@@ -78,46 +78,41 @@ namespace Assembler.Tests.Lexer.Tokenizer {
         }
 
         [TestMethod]
-        public void TestImmediateOperands() {
-            var splitter = new SourceLineTokenizer();
-
-            // Decimal
-            Assert.AreEqual(
+        public void GivenInstructionWithImmediateDecimalOperand_TokenizeLine_Succeeds()
+            => Assert.AreEqual(
                 new TokenizedSourceLine(
                     new SourceInstruction(
                         "add", new ImmediateOperand(100))),
-                splitter.TokenizeLine("add 100"));
+                new SourceLineTokenizer().TokenizeLine("add 100"));
 
-            // Hexadecimal
-            Assert.AreEqual(
+        [TestMethod]
+        public void GivenInstructionWithImmediateHexOperand_TokenizeLine_Succeeds()
+            => Assert.AreEqual(
                 new TokenizedSourceLine(
                     new SourceInstruction(
                         "add", new ImmediateOperand(0x019ABCF))),
-                splitter.TokenizeLine("add 0x019ABCF"));
+                new SourceLineTokenizer().TokenizeLine("add 0x019ABCF"));
 
-            // Binary
-            Assert.AreEqual(
+        [TestMethod]
+        public void GivenInstructionWithImmediateBinaryOperand_TokenizeLine_Succeeds()
+            => Assert.AreEqual(
                 new TokenizedSourceLine(
                     new SourceInstruction(
                         "add", new ImmediateOperand(0x95))),
-                splitter.TokenizeLine("add 0b10010101"));
+                new SourceLineTokenizer().TokenizeLine("add 0b10010101"));
 
-            // Label
-            // TODO
-        }
-
-        //[TestMethod]
-        //public void TestBaseOffsetOperands() {
-        //    var splitter = new SourceLineTokenizer();
-        //    var expected = new ScannedSourceLine(null, "sub", new[] {"0xffe($t0)"}, null);
-
-        //    Assert.AreEqual(expected, splitter.TokenizeLine("sub 0xffe($t0)"));
-        //    Assert.AreEqual(expected, splitter.TokenizeLine("sub 0xffe ( $t0 ) "));
-        //}
+        [TestMethod]
+        public void GivenInstructionWithBaseOffsetOperand_TokenizeLine_Succeeds()
+            => Assert.AreEqual(
+                new TokenizedSourceLine(
+                    new SourceInstruction(
+                        "lw", new BaseOffsetOperand(
+                            new RegisterOperand(Registers.RegisterNumber.T0),
+                            new ImmediateOperand(0x8)))),
+                new SourceLineTokenizer().TokenizeLine("lw 0x8($t0)"));
 
         [TestMethod, ExpectedException(typeof(ArgumentException))]
-        public void TestInvalidLine() {
-            var splitter = new SourceLineTokenizer().TokenizeLine("67r56f");
-        }
+        public void GivenInvalidLine_TokenizeLine_Throws()
+            => new SourceLineTokenizer().TokenizeLine("67r56f");
     }
 }

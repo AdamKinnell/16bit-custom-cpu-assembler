@@ -17,14 +17,15 @@ namespace Assembler.Parser.Operand {
         /// </exception>
         [NotNull]
         public IOperand Parse([NotNull] string operand) {
-            try {
-                return new ImmediateOperandParser().Parse(operand);
-            } catch (ArgumentException) {}
-            try {
-                return new RegisterOperandParser().Parse(operand);
-            } catch (ArgumentException) {}
+            var token =
+               (IOperand) new BaseOffsetOperandParser().TryParse(operand) ??
+               (IOperand) new ImmediateOperandParser().TryParse(operand) ??
+               (IOperand) new RegisterOperandParser().TryParse(operand);
 
-            throw new ArgumentException("Could not be parsed as operand.", nameof(operand));
+            if (token != null)
+                return token;
+            else
+                throw new ArgumentException("Could not be parsed as operand.", nameof(operand));
         }
     }
 }

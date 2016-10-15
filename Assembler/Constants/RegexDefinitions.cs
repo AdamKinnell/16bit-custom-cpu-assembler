@@ -67,24 +67,20 @@ namespace Assembler.Constants {
 
         // Named capture group: "operands"
         // 1 named capture group per operand: "operand"
-        [NotNull] public static string Operands {
-            get {
-                string multiple_operands = $@"(?:{SingleOperand} )*{SingleOperand}";
-                return MakeCapture(multiple_operands, "operands");
-            }
-        }
+        [NotNull] public static string Operands
+            => MakeCapture($@"(?:{SingleOperand} )*{SingleOperand}", "operands");
 
         // Named capture group: "operand"
         [NotNull] public static string SingleOperand
             => MakeCapture($@"(?:{BaseOffsetOperand}|{RegisterOperand}|{ImmediateOperand})", "operand");
 
-        // No capture groups.
+        // Named capture group: "register"
         [NotNull] public static string RegisterOperand
-            => @"\$[a-zA-Z0-9]+";
+            => MakeCapture(@"\$[a-zA-Z0-9]+", "register");
 
-        // No capture groups.
+        // Named capture group: "immediate"
         [NotNull] public static string ImmediateOperand
-            => $@"(?:{IntegerImmediate}|{LabelName})";
+            => MakeCapture($@"(?:{IntegerImmediate}|{LabelName})", "immediate");
 
         // No capture groups.
         [NotNull] public static string IntegerImmediate
@@ -102,13 +98,13 @@ namespace Assembler.Constants {
         [NotNull] public static string BinaryImmediate
             => @"0b[01]+";
 
-        // No capture groups.
+        // Named capture group: "register"
+        // Named capture group: "immediate"
         [NotNull] public static string BaseOffsetOperand
             => $@"{ImmediateOperand} *\( *{RegisterOperand} *\)";
 
         // Comment ////////////////////////////////////////////////////////////
 
-        // Named capture group: "comment"
         [NotNull] public static string Comment
             => @"#" + MakeCapture(@".*", "comment");
     }
