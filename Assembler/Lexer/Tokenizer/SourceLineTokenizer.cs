@@ -75,14 +75,13 @@ namespace Assembler.Lexer.Tokenizer {
         [NotNull]
         private TokenizedSourceLine CreateSourceLine([NotNull] Match match) {
             var label = GetMatchGroupValue(match, "label");
-            var comment = GetMatchGroupValue(match, "comment");
 
             var mnemonic = GetMatchGroupValue(match, "mnemonic");
             var operands = TokenizeOperands(match.Groups["operand"]);
             var instruction = mnemonic == null ? null
                 : new SourceInstruction(mnemonic, operands);
 
-            return new TokenizedSourceLine(label, instruction, comment);
+            return new TokenizedSourceLine(label, instruction);
         }
 
         /// <summary>

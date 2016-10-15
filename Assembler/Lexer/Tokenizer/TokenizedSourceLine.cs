@@ -12,7 +12,7 @@ namespace Assembler.Lexer.Tokenizer {
         // Static Functions ///////////////////////////////////////////////////
 
         [NotNull]
-        public static TokenizedSourceLine CreateEmpty() => new TokenizedSourceLine(null, null, null);
+        public static TokenizedSourceLine CreateEmpty() => new TokenizedSourceLine(null, null);
 
         // Constructors ///////////////////////////////////////////////////////
 
@@ -21,31 +21,26 @@ namespace Assembler.Lexer.Tokenizer {
         /// </summary>
         /// <param name="label"> </param>
         /// <param name="instruction"> </param>
-        /// <param name="comment"> </param>
         public TokenizedSourceLine([CanBeNull] string label,
-                                   [CanBeNull] SourceInstruction instruction,
-                                   [CanBeNull] string comment) {
+                                   [CanBeNull] SourceInstruction instruction) {
             Label = label;
             Instruction = instruction;
-            Comment = comment;
         }
 
         /// <summary>
         ///     Construct just from an instruction.
         /// </summary>
         public TokenizedSourceLine([NotNull] SourceInstruction instruction)
-            : this(null, instruction, null) {}
+            : this(null, instruction) {}
 
         // Properties /////////////////////////////////////////////////////////
 
         [CanBeNull] public string Label { get; }
         [CanBeNull] public SourceInstruction Instruction { get; }
-        [CanBeNull] public string Comment { get; }
 
-        public bool HasLabel => Label != null;
+        public bool HasLabel       => Label != null;
         public bool HasInstruction => Instruction != null;
-        public bool HasComment => Comment != null;
-        public bool IsEmpty => !HasLabel && !HasInstruction && !HasComment;
+        public bool IsEmpty        => !HasLabel && !HasInstruction;
 
         // Implemented Functions //////////////////////////////////////////////
 
@@ -56,8 +51,7 @@ namespace Assembler.Lexer.Tokenizer {
         /// <inheritdoc />
         protected bool Equals([NotNull] TokenizedSourceLine other) =>
             Equals(Label, other.Label) &&
-            Equals(Instruction, other.Instruction) &&
-            Equals(Comment, other.Comment);
+            Equals(Instruction, other.Instruction);
 
         /// <inheritdoc />
         public override int GetHashCode() {

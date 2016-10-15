@@ -20,7 +20,7 @@ namespace Assembler.Tests.Lexer.Tokenizer {
 
         [TestMethod]
         public void GivenOnlyLabel_TokenizeLine_ReturnsOnlyLabel()
-            => Assert.AreEqual(new TokenizedSourceLine("main", null, null),
+            => Assert.AreEqual(new TokenizedSourceLine("main", null),
                                new SourceLineTokenizer().TokenizeLine("main:"));
 
         [TestMethod]
@@ -29,16 +29,10 @@ namespace Assembler.Tests.Lexer.Tokenizer {
                                new SourceLineTokenizer().TokenizeLine("add"));
 
         [TestMethod]
-        public void GivenOnlyComment_TokenizeLine_ReturnsOnlyComment()
-            => Assert.AreEqual(new TokenizedSourceLine(null, null, "This is a comment"),
-                               new SourceLineTokenizer().TokenizeLine("# This is a comment"));
-
-        [TestMethod]
         public void TestFullLine() {
             var splitter = new SourceLineTokenizer();
             var expected = new TokenizedSourceLine(
                 label: "_MaiN_",
-                comment: ":$#$:comment:$#$:",
                 instruction: new SourceInstruction(
                     "AnD",
                     new RegisterOperand(Registers.RegisterNumber.T0),
@@ -61,8 +55,8 @@ namespace Assembler.Tests.Lexer.Tokenizer {
         public void GivenInstructionWithExtraFormatting_TokenizeLine_Succeeds() {
             var splitter = new SourceLineTokenizer();
             var expected = new TokenizedSourceLine(
-                label: null, comment: null, instruction:
-                new SourceInstruction(
+                label: null, 
+                instruction: new SourceInstruction(
                     "and",
                     new RegisterOperand(Registers.RegisterNumber.T0),
                     new RegisterOperand(Registers.RegisterNumber.T1)
