@@ -8,7 +8,7 @@ namespace Assembler.Instructions {
     /// <summary>
     /// 
     /// </summary>
-    class AssemblerMappingBuilder {
+    public class AssemblerMappingBuilder {
 
         // Fields /////////////////////////////////////////////////////////////
 
@@ -56,56 +56,33 @@ namespace Assembler.Instructions {
         }
 
         /// <summary>
+        ///     Check if all necessary fields have been provided.
+        /// </summary>
+        public bool IsValid() =>
+            (opcode_delegate != null) &&
+            (function_delegate != null) &&
+            (r1_delegate != null) &&
+            (r2_delegate != null) &&
+            (immediate_delegate != null);
+
+        /// <summary>
         ///     Builds an instruction with the given parameters.
         /// </summary>
+        /// <exception cref="InvalidOperationException"> If any of the mappings are unspecified. </exception>
         [NotNull]
         public AssemblerMapping Build() {
-            if ((opcode_delegate == null) ||
-                (function_delegate == null) ||
-                (r1_delegate == null) ||
-                (r2_delegate == null) ||
-                (immediate_delegate == null))
-                throw new NullReferenceException("All mappings must be specified.");
-
-            return new AssemblerMapping(this);
+            if (IsValid())
+                return new AssemblerMapping(this);
+            else
+                throw new InvalidOperationException("All mappings must be specified.");
         }
+
+        // Nested Class ///////////////////////////////////////////////////////
 
         /// <summary>
         ///     Assembles an instruction (i.e. generates the fields)
         /// </summary>
         public class AssemblerMapping {
-
-            // Static Fields //////////////////////////////////////////////////////
-
-            // 5-bit Opcode.
-            private static readonly Int32 OPCODE_OFFSET = 0;
-
-            private static readonly Int32 OPCODE_MASK
-                = Convert.ToInt32("0000000000000000 0000 0000 000 11111", 2);
-
-            // 3-bit Function
-            private static readonly Int32 FUNCTION_OFFSET = OPCODE_OFFSET + 5;
-
-            private static readonly Int32 FUNCTION_MASK
-                = Convert.ToInt32("0000000000000000 0000 0000 111 00000", 2);
-
-            // 4-bit Register
-            private static readonly Int32 R1_OFFSET = FUNCTION_OFFSET + 3;
-
-            private static readonly Int32 R1_MASK
-                = Convert.ToInt32("0000000000000000 0000 1111 000 00000", 2);
-
-            // 4-bit Register
-            private static readonly Int32 R2_OFFSET = R1_OFFSET + 4;
-
-            private static readonly Int32 R2_MASK
-                = Convert.ToInt32("0000000000000000 1111 0000 000 00000", 2);
-
-            // 16-bit Immediate
-            private static readonly Int32 IMMEDIATE_OFFSET = R2_OFFSET + 4;
-
-            private static readonly Int32 IMMEDIATE_MASK
-                = Convert.ToInt32("1111111111111111 0000 0000 000 00000", 2);
 
             // Fields /////////////////////////////////////////////////////////////
 
@@ -126,17 +103,14 @@ namespace Assembler.Instructions {
             /// <param name="operands"> </param>
             /// <returns> </returns>
             [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-            public Int32 AssembleFromOperands([NotNull] OperandList operands) {
-                var machine_code = 0x0;
-
-                machine_code |= (builder.opcode_delegate(operands) << OPCODE_OFFSET) & OPCODE_MASK;
-                machine_code |= (builder.function_delegate(operands) << FUNCTION_OFFSET) & FUNCTION_MASK;
-                machine_code |= (builder.r1_delegate(operands) << R1_OFFSET) & R1_MASK;
-                machine_code |= (builder.r2_delegate(operands) << R2_OFFSET) & R2_MASK;
-                machine_code |= (builder.immediate_delegate(operands) << IMMEDIATE_OFFSET) & IMMEDIATE_MASK;
-
-                return machine_code;
-            }
+            public Int32 AssembleFromOperands([NotNull] OperandList operands)
+                => new MachineCodeBuilder()
+                    .Opcode(builder.opcode_delegate(operands))
+                    .Function(builder.function_delegate(operands))
+                    .R1(builder.r1_delegate(operands))
+                    .R2(builder.r2_delegate(operands))
+                    .Immediate(builder.immediate_delegate(operands))
+                    .Build();
         }
     }
 

@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Instructions\MachineCodeBuilderTests.cs" />
     <Compile Include="Operands\Parsers\ImmediateOperandParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Lexer\Tokenizer\SourceLineTokenizerTests.cs" />
