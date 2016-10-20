@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions.Operands.Types {
+namespace Assembler.Operands.Types {
 
     /// <summary>
     ///     Represents an operand specifying an immediate compile-time value.

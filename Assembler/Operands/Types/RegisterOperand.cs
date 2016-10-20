@@ -2,7 +2,7 @@
 using Assembler.Constants;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions.Operands.Types {
+namespace Assembler.Operands.Types {
 
     /// <summary>
     ///     Represents an operand specifying a register.

@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Assembler.Instructions.Operands.Types {
+namespace Assembler.Operands.Types {
 
     /// <summary>
     ///     Represents an operand specifying a base address plus an offset.

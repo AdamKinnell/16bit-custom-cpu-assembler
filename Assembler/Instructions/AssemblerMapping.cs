@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Assembler.Instructions.Operands;
+using Assembler.Operands;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {

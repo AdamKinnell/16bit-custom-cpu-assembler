@@ -1,4 +1,4 @@
-﻿namespace Assembler.Instructions.Operands.Types {
+﻿namespace Assembler.Operands.Types {
 
     /// <summary>
     ///     Marker interface to specify that a class is an operand.

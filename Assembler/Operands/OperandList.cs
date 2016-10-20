@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assembler.Instructions.Operands.Types;
+using Assembler.Operands.Types;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions.Operands {
+namespace Assembler.Operands {
 
     /// <summary>
     ///     Represents a list of zero or more operands.

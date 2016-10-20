@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Assembler.Parser.Operand;
+using Assembler.Operands.Parsers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Assembler.Tests.Parser.Operand {
+namespace Assembler.Tests.Operands.Parsers {
 
     [TestClass]
     public class ImmediateOperandParserTests {

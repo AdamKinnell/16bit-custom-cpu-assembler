@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Assembler.Constants;
 using Assembler.Instructions;
-using Assembler.Instructions.Operands;
 using Assembler.Label;
-using Assembler.Parser.Operand;
+using Assembler.Operands;
+using Assembler.Operands.Parsers;
 using JetBrains.Annotations;
 
 namespace Assembler.Lexer.Tokenizer {

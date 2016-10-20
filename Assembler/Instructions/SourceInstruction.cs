@@ -1,6 +1,6 @@
 ﻿using System;
-using Assembler.Instructions.Operands;
-using Assembler.Instructions.Operands.Types;
+using Assembler.Operands;
+using Assembler.Operands.Types;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {

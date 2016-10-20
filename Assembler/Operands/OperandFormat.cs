@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assembler.Instructions.Operands.Types;
+using Assembler.Operands.Types;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions.Operands {
+namespace Assembler.Operands {
 
     /// <summary>
     ///     Represents the expected or given format of a list of operands.

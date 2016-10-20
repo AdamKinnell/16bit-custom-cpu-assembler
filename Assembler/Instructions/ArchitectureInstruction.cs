@@ -1,5 +1,5 @@
 ﻿using System;
-using Assembler.Instructions.Operands;
+using Assembler.Operands;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {

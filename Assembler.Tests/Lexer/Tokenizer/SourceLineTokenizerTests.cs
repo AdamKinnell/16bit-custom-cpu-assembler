@@ -1,9 +1,9 @@
 ﻿using System;
 using Assembler.Constants;
 using Assembler.Instructions;
-using Assembler.Instructions.Operands.Types;
 using Assembler.Label;
 using Assembler.Lexer.Tokenizer;
+using Assembler.Operands.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Assembler.Tests.Lexer.Tokenizer {

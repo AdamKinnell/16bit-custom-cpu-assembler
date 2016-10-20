@@ -1,7 +1,7 @@
 ﻿using System;
 using Assembler.Instructions;
-using Assembler.Instructions.Operands;
-using Assembler.Instructions.Operands.Types;
+using Assembler.Operands;
+using Assembler.Operands.Types;
 using Assembler.Registries;
 using JetBrains.Annotations;
 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Assembler.Constants;
-using Assembler.Instructions.Operands.Types;
+using Assembler.Operands.Types;
 using JetBrains.Annotations;
 
-namespace Assembler.Parser.Operand {
+namespace Assembler.Operands.Parsers {
 
     /// <summary>
     ///     Parses a numerical immediate operand as specified in the source code.

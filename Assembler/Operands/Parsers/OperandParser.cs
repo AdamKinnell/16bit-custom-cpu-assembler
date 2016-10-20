@@ -1,8 +1,8 @@
 ﻿using System;
-using Assembler.Instructions.Operands.Types;
+using Assembler.Operands.Types;
 using JetBrains.Annotations;
 
-namespace Assembler.Parser.Operand {
+namespace Assembler.Operands.Parsers {
 
     /// <summary>
     ///     Parses an instruction operand as specified in the source code.
