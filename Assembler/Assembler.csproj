@@ -52,6 +52,7 @@
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
     <Compile Include="Instructions\ArchitectureInstruction.cs" />
+    <Compile Include="Instructions\AssemblerMapping.cs" />
     <Compile Include="Instructions\Operands\Types\BaseOffsetOperand.cs" />
     <Compile Include="Instructions\SourceInstruction.cs" />
     <Compile Include="Instructions\Operands\OperandFormat.cs" />

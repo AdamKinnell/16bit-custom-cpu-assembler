@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Assembler.Instructions;
 using Assembler.Instructions.Operands;
 using Assembler.Instructions.Operands.Types;
@@ -40,14 +39,18 @@ namespace Assembler.Constants {
         ///     Register all 3 formats of the AND/NAND/OR/NOR/XOR/XNOR/ADD/SUB instructions.
         /// </summary>
         private static void RegisterALUInstructions([NotNull] InstructionRegistry registry) {
-            registry.Register(new InstructionBuilder()
-                .Mnemonic("and")
-                .OpcodeField((x) => 1)
-                .FunctionField((x) => 1)
-                .R1Field((x) => 1)
-                .R2Field((x) => 1)
-                .ImmediateField((x) => 1)
-                .Build());
+            registry.Register(
+                new ArchitectureInstruction(
+                    mnemonic: "and",
+                    operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
+                    mapping: new AssemblerMappingBuilder()
+                        .Opcode(_ => 0)
+                        .Function(_ => 0)
+                        .R1(_ => 1)
+                        .R2(_ => 1)
+                        .Immediate(_ => 0)
+                        .Build()
+                ));
         }
 
         /// <summary>
