@@ -33,6 +33,14 @@ namespace Assembler.Instructions.Operands {
             OperandTypes = operand_types;
         }
 
+        /// <summary>
+        ///     Construct from a variable number of type arguments.
+        /// </summary>
+        /// <param name="operand_types"> Must be subclasses of IOperand. </param>
+        // ReSharper disable once NotNullMemberIsNotInitialized
+        public OperandFormat([NotNull] params Type[] operand_types)
+            : this((IReadOnlyCollection<Type>) operand_types) {}
+
         // Properties /////////////////////////////////////////////////////////
 
         [NotNull, ItemNotNull] public IEnumerable<Type> OperandTypes { get; }

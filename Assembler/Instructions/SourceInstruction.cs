@@ -31,10 +31,10 @@ namespace Assembler.Instructions {
 
         // Properties /////////////////////////////////////////////////////////
 
-        /// <summary> Get the mnemonic given for this instruction. </summary>
+        /// <summary> The mnemonic given for this instruction. </summary>
         [NotNull] public string Mnemonic { get; }
 
-        /// <summary> Get the operands given for this instruction. </summary>
+        /// <summary> The operands given for this instruction. </summary>
         [NotNull] public OperandList Operands { get; }
 
         // Implemented Functions //////////////////////////////////////////////

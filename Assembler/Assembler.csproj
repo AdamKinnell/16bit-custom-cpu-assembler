@@ -48,8 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\Instructions.cs" />
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
+    <Compile Include="Instructions\ArchitectureInstruction.cs" />
     <Compile Include="Instructions\Operands\Types\BaseOffsetOperand.cs" />
     <Compile Include="Instructions\SourceInstruction.cs" />
     <Compile Include="Instructions\Operands\OperandFormat.cs" />
@@ -67,6 +69,7 @@
     <Compile Include="Parser\Operand\RegisterOperandParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registries\InstructionRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
