@@ -43,6 +43,15 @@ namespace Assembler.Operands {
         /// <summary> Get the format of the operands. </summary>
         [NotNull] public OperandFormat Format { get; }
 
+        // Operator Overloads /////////////////////////////////////////////////
+
+        /// <summary>
+        ///     Get the n'th operand in the list.
+        /// </summary>
+        /// <param name="index"> Starts from 0. </param>
+        [CanBeNull] public IOperand this[int index]
+            => Operands.ElementAt(index);
+
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />

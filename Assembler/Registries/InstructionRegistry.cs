@@ -11,17 +11,16 @@ namespace Assembler.Registries {
 
         // Fields /////////////////////////////////////////////////////////////
 
-        private readonly Dictionary<string, ArchitectureInstruction> registered_instructions
-            = new Dictionary<string, ArchitectureInstruction>();
+        private readonly Dictionary<string, NativeInstruction> registry
+            = new Dictionary<string, NativeInstruction>();
 
         // Functions //////////////////////////////////////////////////////////
 
         /// <summary>
-        /// 
+        ///     Register the given instruction.
         /// </summary>
-        /// <param name="instruction"> </param>
-        public void Register([NotNull] ArchitectureInstruction instruction)
+        public void Register([NotNull] NativeInstruction instruction)
             // ReSharper disable once PossibleNullReferenceException
-            => registered_instructions.Add(instruction.Mnemonic, instruction);
+            => registry.Add(instruction.Mnemonic, instruction);
     }
 }

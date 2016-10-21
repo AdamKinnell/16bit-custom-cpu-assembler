@@ -1,22 +1,25 @@
-﻿using System;
-using Assembler.Operands;
+﻿using Assembler.Operands;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {
 
     /// <summary>
-    /// 
+    ///     Represents an instruction that can be
+    ///     be natively executed by the architecture.
     /// </summary>
-    class ArchitectureInstruction {
+    class NativeInstruction {
 
         // Fields /////////////////////////////////////////////////////////////
 
+        [NotNull] private AssemblerMappingBuilder.InstructionFieldMapping field_mapping;
+
         // Constructors ///////////////////////////////////////////////////////
 
-        public ArchitectureInstruction([NotNull] string mnemonic, [NotNull] OperandFormat operand_format,
-                                       [NotNull] AssemblerMappingBuilder.AssemblerMapping mapping) {
+        public NativeInstruction([NotNull] string mnemonic, [NotNull] OperandFormat format,
+                                 [NotNull] AssemblerMappingBuilder.InstructionFieldMapping mapping) {
             Mnemonic = mnemonic;
-            OperandFormat = operand_format;
+            OperandFormat = format;
+            field_mapping = mapping;
         }
 
         // Properties /////////////////////////////////////////////////////////

@@ -6,7 +6,8 @@ using JetBrains.Annotations;
 namespace Assembler.Instructions {
 
     /// <summary>
-    /// 
+    ///     Builds a mapping which generates instruction
+    ///     fields from a list of operands.
     /// </summary>
     public class AssemblerMappingBuilder {
 
@@ -27,10 +28,24 @@ namespace Assembler.Instructions {
             return this;
         }
 
+        /// <summary> Define a static value for the Opcode field. </summary>
+        [NotNull]
+        public AssemblerMappingBuilder Opcode(Int32 value) {
+            Opcode(_ => value);
+            return this;
+        }
+
         /// <summary> Define the function that generates the Function field. </summary>
         [NotNull]
         public AssemblerMappingBuilder Function([NotNull] Func<OperandList, int> func) {
             function_delegate = func;
+            return this;
+        }
+
+        /// <summary> Define a static value for the Function field. </summary>
+        [NotNull]
+        public AssemblerMappingBuilder Function(Int32 value) {
+            Function(_ => value);
             return this;
         }
 
@@ -41,6 +56,13 @@ namespace Assembler.Instructions {
             return this;
         }
 
+        /// <summary> Define a static value for the R1 field. </summary>
+        [NotNull]
+        public AssemblerMappingBuilder R1(Int32 value) {
+            R1(_ => value);
+            return this;
+        }
+
         /// <summary> Define the function that generates the R2 field. </summary>
         [NotNull]
         public AssemblerMappingBuilder R2([NotNull] Func<OperandList, int> func) {
@@ -48,10 +70,24 @@ namespace Assembler.Instructions {
             return this;
         }
 
+        /// <summary> Define a static value for the R2 field. </summary>
+        [NotNull]
+        public AssemblerMappingBuilder R2(Int32 value) {
+            R2(_ => value);
+            return this;
+        }
+
         /// <summary> Define the function that generates the Immediate field. </summary>
         [NotNull]
         public AssemblerMappingBuilder Immediate([NotNull] Func<OperandList, int> func) {
             immediate_delegate = func;
+            return this;
+        }
+
+        /// <summary> Define a static value for the Immediate field. </summary>
+        [NotNull]
+        public AssemblerMappingBuilder Immediate(Int32 value) {
+            Immediate(_ => value);
             return this;
         }
 
@@ -70,9 +106,9 @@ namespace Assembler.Instructions {
         /// </summary>
         /// <exception cref="InvalidOperationException"> If any of the mappings are unspecified. </exception>
         [NotNull]
-        public AssemblerMapping Build() {
+        public InstructionFieldMapping Build() {
             if (IsValid())
-                return new AssemblerMapping(this);
+                return new InstructionFieldMapping(this);
             else
                 throw new InvalidOperationException("All mappings must be specified.");
         }
@@ -80,9 +116,10 @@ namespace Assembler.Instructions {
         // Nested Class ///////////////////////////////////////////////////////
 
         /// <summary>
-        ///     Assembles an instruction (i.e. generates the fields)
+        ///     Represents mappings from operands
+        ///     to the fields in the instruction machine code.
         /// </summary>
-        public class AssemblerMapping {
+        public class InstructionFieldMapping {
 
             // Fields /////////////////////////////////////////////////////////////
 
@@ -90,7 +127,11 @@ namespace Assembler.Instructions {
 
             // Constructors ///////////////////////////////////////////////////////
 
-            public AssemblerMapping([NotNull] AssemblerMappingBuilder builder) {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="builder"> </param>
+            public InstructionFieldMapping([NotNull] AssemblerMappingBuilder builder) {
                 this.builder = builder;
             }
 
