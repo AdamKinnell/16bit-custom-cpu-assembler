@@ -22,7 +22,7 @@ namespace Assembler {
         ///     Only lines with labels or instructions are returned.
         /// </summary>
         /// <exception cref="ArgumentException"> If tokenizing fails. </exception>
-        [NotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<TokenizedSourceLine> TokenizeLines([NotNull] TextReader input) {
             var lines = new List<TokenizedSourceLine>();
             while (true) {
@@ -41,7 +41,7 @@ namespace Assembler {
         /// 
         /// </summary>
         /// <exception cref="ArgumentException"> If tokenizing fails. </exception>
-        [NotNull]
+        [NotNull, ItemNotNull]
         private static IEnumerable<TokenizedSourceLine> TokenizeLinesFromFile([NotNull] string path) {
             using (var source_file = File.OpenText(path)) {
                 return TokenizeLines(source_file);
@@ -54,6 +54,13 @@ namespace Assembler {
 
             // Tokenize lines from source file.
             var lines = TokenizeLinesFromFile(SOURCE_PATH);
+
+            foreach (var line in lines) {
+                if (!line.HasInstruction) continue;
+
+                var registry = Constants.Instructions.GetRegistry();
+                var instruction = registry.Find(line.Instruction);
+            }
 
             // Assemble instructions.
             // TODO

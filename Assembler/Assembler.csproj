@@ -51,8 +51,9 @@
     <Compile Include="Constants\Instructions.cs" />
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
+    <Compile Include="Instructions\InstructionFormat.cs" />
     <Compile Include="Instructions\NativeInstruction.cs" />
-    <Compile Include="Instructions\AssemblerMapping.cs" />
+    <Compile Include="Instructions\InstructionFieldMapping.cs" />
     <Compile Include="Instructions\MachineCodeBuilder.cs" />
     <Compile Include="Operands\Types\BaseOffsetOperand.cs" />
     <Compile Include="Instructions\SourceInstruction.cs" />

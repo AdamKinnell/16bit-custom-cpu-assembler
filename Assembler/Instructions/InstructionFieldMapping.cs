@@ -9,7 +9,7 @@ namespace Assembler.Instructions {
     ///     Builds a mapping which generates instruction
     ///     fields from a list of operands.
     /// </summary>
-    public class AssemblerMappingBuilder {
+    public class InstructionFieldMappingBuilder {
 
         // Fields /////////////////////////////////////////////////////////////
 
@@ -23,70 +23,70 @@ namespace Assembler.Instructions {
 
         /// <summary> Define the function that generates the Opcode field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder Opcode([NotNull] Func<OperandList, int> func) {
+        public InstructionFieldMappingBuilder Opcode([NotNull] Func<OperandList, int> func) {
             opcode_delegate = func;
             return this;
         }
 
         /// <summary> Define a static value for the Opcode field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder Opcode(Int32 value) {
+        public InstructionFieldMappingBuilder Opcode(Int32 value) {
             Opcode(_ => value);
             return this;
         }
 
         /// <summary> Define the function that generates the Function field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder Function([NotNull] Func<OperandList, int> func) {
+        public InstructionFieldMappingBuilder Function([NotNull] Func<OperandList, int> func) {
             function_delegate = func;
             return this;
         }
 
         /// <summary> Define a static value for the Function field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder Function(Int32 value) {
+        public InstructionFieldMappingBuilder Function(Int32 value) {
             Function(_ => value);
             return this;
         }
 
         /// <summary> Define the function that generates the R1 field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder R1([NotNull] Func<OperandList, int> func) {
+        public InstructionFieldMappingBuilder R1([NotNull] Func<OperandList, int> func) {
             r1_delegate = func;
             return this;
         }
 
         /// <summary> Define a static value for the R1 field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder R1(Int32 value) {
+        public InstructionFieldMappingBuilder R1(Int32 value) {
             R1(_ => value);
             return this;
         }
 
         /// <summary> Define the function that generates the R2 field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder R2([NotNull] Func<OperandList, int> func) {
+        public InstructionFieldMappingBuilder R2([NotNull] Func<OperandList, int> func) {
             r2_delegate = func;
             return this;
         }
 
         /// <summary> Define a static value for the R2 field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder R2(Int32 value) {
+        public InstructionFieldMappingBuilder R2(Int32 value) {
             R2(_ => value);
             return this;
         }
 
         /// <summary> Define the function that generates the Immediate field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder Immediate([NotNull] Func<OperandList, int> func) {
+        public InstructionFieldMappingBuilder Immediate([NotNull] Func<OperandList, int> func) {
             immediate_delegate = func;
             return this;
         }
 
         /// <summary> Define a static value for the Immediate field. </summary>
         [NotNull]
-        public AssemblerMappingBuilder Immediate(Int32 value) {
+        public InstructionFieldMappingBuilder Immediate(Int32 value) {
             Immediate(_ => value);
             return this;
         }
@@ -123,15 +123,11 @@ namespace Assembler.Instructions {
 
             // Fields /////////////////////////////////////////////////////////////
 
-            private readonly AssemblerMappingBuilder builder;
+            private readonly InstructionFieldMappingBuilder builder;
 
             // Constructors ///////////////////////////////////////////////////////
 
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="builder"> </param>
-            public InstructionFieldMapping([NotNull] AssemblerMappingBuilder builder) {
+            public InstructionFieldMapping([NotNull] InstructionFieldMappingBuilder builder) {
                 this.builder = builder;
             }
 

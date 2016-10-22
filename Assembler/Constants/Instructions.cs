@@ -11,7 +11,7 @@ namespace Assembler.Constants {
     /// <summary>
     ///     Contains definitions of all native instructions in the architecture.
     /// </summary>
-    class Instructions {
+    public class Instructions {
 
         // Static Fields //////////////////////////////////////////////////////
 
@@ -40,19 +40,19 @@ namespace Assembler.Constants {
         /// </summary>
         [NotNull]
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        private static AssemblerMappingBuilder GetRRBuilder()
-            => new AssemblerMappingBuilder()
+        private static InstructionFieldMappingBuilder GetRRBuilder()
+            => new InstructionFieldMappingBuilder()
                 .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
                 .R2(ops => (int) ((RegisterOperand) ops[1]).RegisterNumber)
                 .Immediate(0);
 
         /// <summary>
-        ///     Get a mapping builder for an RI or RIC type instruction.
+        ///     Get a mapping builder for an RI type instruction.
         /// </summary>
         [NotNull]
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        private static AssemblerMappingBuilder GetRIBuilder()
-            => new AssemblerMappingBuilder()
+        private static InstructionFieldMappingBuilder GetRIBuilder()
+            => new InstructionFieldMappingBuilder()
                 .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
                 .R2(ops => (int) ((RegisterOperand) ops[1]).RegisterNumber)
                 .Immediate(ops => ((ImmediateOperand) ops[2]).Value);
@@ -64,7 +64,7 @@ namespace Assembler.Constants {
         private static NativeInstruction CreateRRInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstruction(
                 mnemonic: mnemonic,
-                operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
+                format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
                 mapping: GetRRBuilder()
                     .Opcode(opcode)
                     .Function(function)
@@ -72,13 +72,13 @@ namespace Assembler.Constants {
             );
 
         /// <summary>
-        ///     Create a native RI or RIC format instruction.
+        ///     Create a native RI format instruction.
         /// </summary>
         [NotNull]
         private static NativeInstruction CreateRIInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstruction(
                 mnemonic: mnemonic,
-                operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE, IMMEDIATE_TYPE),
+                format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE, IMMEDIATE_TYPE),
                 mapping: GetRIBuilder()
                     .Opcode(opcode)
                     .Function(function)
@@ -196,8 +196,8 @@ namespace Assembler.Constants {
             registry.Register(
                 new NativeInstruction(
                     mnemonic: "halt",
-                    operand_format: new OperandFormat(),
-                    mapping: new AssemblerMappingBuilder()
+                    format: new OperandFormat(),
+                    mapping: new InstructionFieldMappingBuilder()
                         .Opcode(31)
                         .Function(0)
                         .R1(0)
@@ -206,5 +206,14 @@ namespace Assembler.Constants {
                         .Build())
             );
         }
+
+        // Functions //////////////////////////////////////////////////////////
+
+        /// <summary>
+        ///     Get the list of all registered instructions
+        ///     which are valid for the architecture.
+        /// </summary>
+        public static InstructionRegistry GetRegistry()
+            => INSTRUCTION_REGISTRY;
     }
 }

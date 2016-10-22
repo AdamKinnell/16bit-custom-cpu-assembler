@@ -37,6 +37,9 @@ namespace Assembler.Instructions {
         /// <summary> The operands given for this instruction. </summary>
         [NotNull] public OperandList Operands { get; }
 
+        /// <summary> </summary>
+        [NotNull] public OperandFormat Format { get; }
+
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />

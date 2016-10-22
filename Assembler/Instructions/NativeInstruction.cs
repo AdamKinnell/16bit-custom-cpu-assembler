@@ -7,16 +7,16 @@ namespace Assembler.Instructions {
     ///     Represents an instruction that can be
     ///     be natively executed by the architecture.
     /// </summary>
-    class NativeInstruction {
+    public class NativeInstruction {
 
         // Fields /////////////////////////////////////////////////////////////
 
-        [NotNull] private AssemblerMappingBuilder.InstructionFieldMapping field_mapping;
+        [NotNull] private InstructionFieldMappingBuilder.InstructionFieldMapping field_mapping;
 
         // Constructors ///////////////////////////////////////////////////////
 
         public NativeInstruction([NotNull] string mnemonic, [NotNull] OperandFormat format,
-                                 [NotNull] AssemblerMappingBuilder.InstructionFieldMapping mapping) {
+                                 [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
             Mnemonic = mnemonic;
             OperandFormat = format;
             field_mapping = mapping;

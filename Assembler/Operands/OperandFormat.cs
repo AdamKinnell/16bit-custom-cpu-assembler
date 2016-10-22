@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Assembler.Operands.Types;
 using JetBrains.Annotations;
@@ -25,7 +26,7 @@ namespace Assembler.Operands {
         /// </summary>
         /// <param name="operand_types"> Must be subclasses of IOperand. </param>
         /// <exception cref="ArgumentException"> If any type not subclass of IOperand. </exception>
-        // ReSharper disable once NotNullMemberIsNotInitialized
+        [SuppressMessage("ReSharper", "NotNullMemberIsNotInitialized")]
         public OperandFormat([NotNull, ItemNotNull] IReadOnlyCollection<Type> operand_types) {
             if (OperandTypes.Any(operand_type => !operand_type.IsSubclassOf(typeof(IOperand)))) {
                 throw new ArgumentException("Not a type of operand.", nameof(operand_types));
