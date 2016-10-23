@@ -148,7 +148,7 @@ namespace Assembler.Instructions {
                     .R1(builder.r1_delegate(operands))
                     .R2(builder.r2_delegate(operands))
                     .Immediate(builder.immediate_delegate(operands))
-                    .Build();
+                    .BuildAsInt32();
         }
     }
 

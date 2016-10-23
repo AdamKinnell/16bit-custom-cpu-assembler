@@ -14,8 +14,8 @@ namespace Assembler {
         private const string RESOURCE_FOLDER = @"../../Resources/";
 
         private static readonly string SOURCE_PATH = Path.Combine(RESOURCE_FOLDER, "source.asm");
-        private static readonly string TEXT_PATH = Path.Combine(RESOURCE_FOLDER, "text.bin");
-        private static readonly string DATA_PATH = Path.Combine(RESOURCE_FOLDER, "data.bin");
+        private static readonly string TEXT_PATH = Path.Combine(RESOURCE_FOLDER, "text.txt");
+        private static readonly string DATA_PATH = Path.Combine(RESOURCE_FOLDER, "data.txt");
 
         // Functions //////////////////////////////////////////////////////////
 
@@ -80,11 +80,17 @@ namespace Assembler {
             // TODO
 
             // Write machine code.
-            using (var file = File.OpenWrite(TEXT_PATH))
-            using (var writer = new BinaryWriter(file)) {
+            using (var writer = new StreamWriter(TEXT_PATH)) {
+                writer.Write("v2.0 raw\r\n");
                 foreach (Int32 word in machine_code) {
-                    writer.Write(word);
+                    var bytes = BitConverter.GetBytes(word);
+                    if (BitConverter.IsLittleEndian) Array.Reverse(bytes);
+
+                    foreach (byte b in bytes)
+                        writer.Write($@"{b:X2}");
+                    writer.Write(' ');
                 }
+                writer.WriteLine();
             }
 
             // Done!

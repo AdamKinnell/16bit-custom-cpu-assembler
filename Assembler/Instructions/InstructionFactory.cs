@@ -26,10 +26,9 @@ namespace Assembler.Instructions {
         ///     -   R1  = First Operand
         ///     -   R2  = Second Operand
         ///     -   IMM = 0
-        ///     i.e. MNEM $R1, $R2
         /// </summary>
         [NotNull]
-        public static NativeInstruction CreateStandardRRInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+        public static NativeInstruction CreateRRStandardInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstruction(
                 mnemonic: mnemonic,
                 operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
@@ -46,13 +45,12 @@ namespace Assembler.Instructions {
         ///     Create a standard RI format instruction.
         /// 
         ///     With Mapping:
-        ///     -   R1 = First Operand
-        ///     -   R2 = Second Operand
+        ///     -   R1  = First Operand
+        ///     -   R2  = Second Operand
         ///     -   IMM = Third Operand
-        ///     i.e. MNEM $R1, $R2, IMM
         /// </summary>
         [NotNull]
-        public static NativeInstruction CreateStandardRIInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+        public static NativeInstruction CreateRIStandardInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstruction(
                 mnemonic: mnemonic,
                 operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE, IMMEDIATE_TYPE),
@@ -67,13 +65,35 @@ namespace Assembler.Instructions {
 
         /// <summary>
         ///     Create an RI format instruction
+        ///     with the destination implicity defined as the first (register) operand.
+        /// 
+        ///     With Mapping:
+        ///     -   R1  = First Operand
+        ///     -   R2  = First Operand
+        ///     -   IMM = Second Operand
+        /// </summary>
+        [NotNull]
+        public static NativeInstruction CreateRIImplicitDestinationInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+            => new NativeInstruction(
+                mnemonic: mnemonic,
+                operand_format: new OperandFormat(REGISTER_TYPE, IMMEDIATE_TYPE),
+                mapping: new InstructionFieldMappingBuilder()
+                    .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                    .R2(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                    .Immediate(ops => ((ImmediateOperand) ops[1]).Value)
+                    .Opcode(opcode)
+                    .Function(function)
+                    .Build()
+            );
+
+        /// <summary>
+        ///     Create an RI format instruction
         ///     where the destination register is unused.
         /// 
         ///     With Mapping:
-        ///     -   R1 = Zero
-        ///     -   R2 = First Operand
+        ///     -   R1  = Zero
+        ///     -   R2  = First Operand
         ///     -   IMM = Second Operand
-        ///     i.e. MNEM $R2, IMM
         /// </summary>
         [NotNull]
         public static NativeInstruction CreateRIDestinationUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)

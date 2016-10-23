@@ -57,12 +57,16 @@ namespace Assembler.Constants {
 
             // Add RR, RI, and RI(C) formats for each instruction.
             foreach (var pair in alu_instructions) {
-                registry.Register(InstructionFactory.CreateStandardRRInstruction(
-                                      pair.Item1, ALU_RR_OPCODE, pair.Item2));
-                registry.Register(InstructionFactory.CreateStandardRIInstruction(
-                                      pair.Item1, ALU_RI_OPCODE, pair.Item2));
-                registry.Register(InstructionFactory.CreateStandardRIInstruction(
-                                      pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2));
+                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                                      pair.Item1, ALU_RR_OPCODE, pair.Item2)); ///////// ADD $t0, $t1    :=: $t0 += $t1
+                registry.Register(InstructionFactory.CreateRIStandardInstruction(
+                                      pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, $t1, 8 :=: $t0 = $t1 + 8
+                registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
+                                      pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, 8      :=: $t0 += 8 
+                registry.Register(InstructionFactory.CreateRIStandardInstruction(
+                                      pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2)); // ADDC $t0, $t1, 8 :=: if(c) $t0 = $t1 + 8
+                registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
+                                      pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2)); // ADDC $t0, 8      :=: if(c) $t0 += 8
             }
         }
 
@@ -85,10 +89,12 @@ namespace Assembler.Constants {
 
             // Add RR and RI formats for each instruction.
             foreach (var pair in shifter_instructions) {
-                registry.Register(InstructionFactory.CreateStandardRRInstruction(
-                                      pair.Item1, SHIFTER_RR_OPCODE, pair.Item2));
-                registry.Register(InstructionFactory.CreateStandardRIInstruction(
-                                      pair.Item1, SHIFTER_RI_OPCODE, pair.Item2));
+                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                                      pair.Item1, SHIFTER_RR_OPCODE, pair.Item2)); // SLL $t0, $t1    :=: $t0 << $t1
+                registry.Register(InstructionFactory.CreateRIStandardInstruction(
+                                      pair.Item1, SHIFTER_RI_OPCODE, pair.Item2)); // SLL $t0, $t1, 8 :=: $t0 = $t1 << 8
+                registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
+                                      pair.Item1, SHIFTER_RI_OPCODE, pair.Item2)); // SLL $t0, 8      :=: $t0 <<= 8
             }
 
         }
@@ -115,7 +121,7 @@ namespace Assembler.Constants {
 
             // Add RR and RI formats for each instruction.
             foreach (var pair in comparison_instructions) {
-                registry.Register(InstructionFactory.CreateStandardRRInstruction(
+                registry.Register(InstructionFactory.CreateRRStandardInstruction(
                                       pair.Item1, COMPARATOR_RR_OPCODE, pair.Item2));
                 registry.Register(InstructionFactory.CreateRIDestinationUnusedInstruction(
                                       pair.Item1, COMPARATOR_RI_OPCODE, pair.Item2));

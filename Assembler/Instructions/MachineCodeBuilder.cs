@@ -13,26 +13,31 @@ namespace Assembler.Instructions {
 
         // 5-bit Opcode.
         private static readonly Int32 OPCODE_OFFSET = 0;
+
         private static readonly Int32 OPCODE_MASK
             = Convert.ToInt32("0000000000000000 0000 0000 000 11111".Replace(" ", ""), 2);
 
         // 3-bit Function
         private static readonly Int32 FUNCTION_OFFSET = OPCODE_OFFSET + 5;
+
         private static readonly Int32 FUNCTION_MASK
             = Convert.ToInt32("0000000000000000 0000 0000 111 00000".Replace(" ", ""), 2);
 
         // 4-bit Register
         private static readonly Int32 R1_OFFSET = FUNCTION_OFFSET + 3;
+
         private static readonly Int32 R1_MASK
             = Convert.ToInt32("0000000000000000 0000 1111 000 00000".Replace(" ", ""), 2);
 
         // 4-bit Register
         private static readonly Int32 R2_OFFSET = R1_OFFSET + 4;
+
         private static readonly Int32 R2_MASK
             = Convert.ToInt32("0000000000000000 1111 0000 000 00000".Replace(" ", ""), 2);
 
         // 16-bit Immediate
         private static readonly Int32 IMMEDIATE_OFFSET = R2_OFFSET + 4;
+
         private static readonly Int32 IMMEDIATE_MASK
             = Convert.ToInt32("1111111111111111 0000 0000 000 00000".Replace(" ", ""), 2);
 
@@ -95,10 +100,10 @@ namespace Assembler.Instructions {
         ///     Check if all necessary fields have been provided.
         /// </summary>
         public bool IsValid() =>
-            (opcode    != null) &&
-            (function  != null) &&
-            (r1        != null) &&
-            (r2        != null) &&
+            (opcode != null) &&
+            (function != null) &&
+            (r1 != null) &&
+            (r2 != null) &&
             (immediate != null);
 
         /// <summary>
@@ -107,10 +112,10 @@ namespace Assembler.Instructions {
         [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         private Int32 PackAsInt32() {
             var machine_code = 0x0;
-            machine_code |= (opcode.Value    << OPCODE_OFFSET)    & OPCODE_MASK;
-            machine_code |= (function.Value  << FUNCTION_OFFSET)  & FUNCTION_MASK;
-            machine_code |= (r1.Value        << R1_OFFSET)        & R1_MASK;
-            machine_code |= (r2.Value        << R2_OFFSET)        & R2_MASK;
+            machine_code |= (opcode.Value << OPCODE_OFFSET) & OPCODE_MASK;
+            machine_code |= (function.Value << FUNCTION_OFFSET) & FUNCTION_MASK;
+            machine_code |= (r1.Value << R1_OFFSET) & R1_MASK;
+            machine_code |= (r2.Value << R2_OFFSET) & R2_MASK;
             machine_code |= (immediate.Value << IMMEDIATE_OFFSET) & IMMEDIATE_MASK;
             return machine_code;
         }
@@ -119,10 +124,38 @@ namespace Assembler.Instructions {
         ///     Generates the machine code from the values set.
         /// </summary>
         /// <exception cref="InvalidOperationException"> If any of the fields are unspecified. </exception>
-        public Int32 Build() {
+        public Int32 BuildAsInt32() {
             if (IsValid())
                 return PackAsInt32();
             else
+                throw new InvalidOperationException("All fields must be specified.");
+        }
+
+        /// <summary>
+        ///     Generates the machine code from the values set.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"> If any of the fields are unspecified. </exception>
+        [NotNull]
+        public byte[] BuildAsLittleEndianBytes() {
+            if (IsValid()) {
+                var bytes = BitConverter.GetBytes(PackAsInt32());
+                if (!BitConverter.IsLittleEndian) Array.Reverse(bytes);
+                return bytes;
+            } else
+                throw new InvalidOperationException("All fields must be specified.");
+        }
+
+        /// <summary>
+        ///     Generates the machine code from the values set.
+        /// </summary>
+        /// <exception cref="InvalidOperationException"> If any of the fields are unspecified. </exception>
+        [NotNull]
+        public byte[] BuildAsBigEndianBytes() {
+            if (IsValid()) {
+                var bytes = BitConverter.GetBytes(PackAsInt32());
+                if (BitConverter.IsLittleEndian) Array.Reverse(bytes);
+                return bytes;
+            } else
                 throw new InvalidOperationException("All fields must be specified.");
         }
     }

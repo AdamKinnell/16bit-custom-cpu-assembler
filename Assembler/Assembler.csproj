@@ -76,12 +76,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Resources\data.bin" />
     <None Include="packages.config" />
-    <None Include="Resources\text.bin" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\source.asm" />
+    <Content Include="Resources\text.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
