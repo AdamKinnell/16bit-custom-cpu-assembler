@@ -51,12 +51,17 @@ namespace Assembler {
         }
 
         /// <summary>
-        /// 
+        ///     Assemble the given instruction into machine code.
         /// </summary>
+        /// <exception cref="ArgumentException"> If the instruction is invalid. </exception>
         private static Int32 AssembleSourceInstruction([NotNull] SourceInstruction instruction) {
             var registry = Constants.Instructions.GetRegistry();
             var native = registry.Find(instruction.Format);
-            return native.AssembleWithOperands(instruction.Operands);
+
+            if (native == null)
+                throw new ArgumentException("No instruction of the given format has been registered.");
+            else
+                return native.AssembleWithOperands(instruction.Operands);
         }
 
         // Entry Point ////////////////////////////////////////////////////////

@@ -37,6 +37,10 @@ namespace Assembler.Constants {
 
         /// <summary>
         ///     Get a mapping builder for an RR type instruction.
+        /// 
+        ///     R1 = First Operand
+        ///     R2 = Second Operand
+        ///     i.e. MNEM $R1, $R2
         /// </summary>
         [NotNull]
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
@@ -48,6 +52,11 @@ namespace Assembler.Constants {
 
         /// <summary>
         ///     Get a mapping builder for an RI type instruction.
+        /// 
+        ///     R1 = First Operand
+        ///     R2 = Second Operand
+        ///     IMM = Third Operand
+        ///     i.e. MNEM $R1, $R2, IMM
         /// </summary>
         [NotNull]
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
@@ -56,6 +65,23 @@ namespace Assembler.Constants {
                 .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
                 .R2(ops => (int) ((RegisterOperand) ops[1]).RegisterNumber)
                 .Immediate(ops => ((ImmediateOperand) ops[2]).Value);
+
+        /// <summary>
+        ///     Get a mapping builder for an RI type instruction
+        ///     where the destination register is unused.
+        /// 
+        ///     R1 = Zero
+        ///     R2 = First Operand
+        ///     IMM = Second Operand
+        ///     i.e. MNEM $R2, IMM
+        /// </summary>
+        [NotNull]
+        [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+        private static InstructionFieldMappingBuilder GetRIDestinationUnusedBuilder()
+            => new InstructionFieldMappingBuilder()
+                .R1(ops => (int) Registers.RegisterNumber.ZERO)
+                .R2(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                .Immediate(ops => ((ImmediateOperand) ops[1]).Value);
 
         /// <summary>
         ///     Create a native RR format instruction.

@@ -7,6 +7,7 @@ using Assembler.Operands.Types;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Assembler.Tests.Operands {
+
     [TestClass]
     public class OperandFormatTests {
 
@@ -30,8 +31,13 @@ namespace Assembler.Tests.Operands {
             // Sanity check.
             CollectionAssert.AreEqual(expected_types, operands.Select(x => x.GetType()).ToList());
 
-            // Equality operator should return true.
-            Assert.AreEqual(new OperandFormat(operands), new OperandFormat(expected_types));
+            // Equality function should return true.
+            Assert.AreEqual(new OperandFormat(operands),
+                            new OperandFormat(expected_types));
+
+            // Hash code should be equal.
+            Assert.AreEqual(new OperandFormat(operands).GetHashCode(),
+                            new OperandFormat(expected_types).GetHashCode());
 
             // Types in the format should match those given.
             CollectionAssert.AreEqual(expected_types, new OperandFormat(operands).OperandTypes.ToList());

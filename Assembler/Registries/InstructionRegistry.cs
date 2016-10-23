@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Assembler.Instructions;
 using JetBrains.Annotations;
@@ -20,9 +21,13 @@ namespace Assembler.Registries {
         /// <summary>
         ///     Register the given instruction.
         /// </summary>
+        /// <exception cref="InvalidOperationException"> </exception>
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        public void Register([NotNull] NativeInstruction instruction)
-            => registry.Add(instruction.Format, instruction);
+        public void Register([NotNull] NativeInstruction instruction) {
+            if (IsRegistered(instruction.Format))
+                throw new InvalidOperationException("An instruction with this format is already registered.");
+            registry.Add(instruction.Format, instruction);
+        }
 
         /// <summary>
         ///     Check if an instruction of the given format has been registered.

@@ -59,12 +59,8 @@ namespace Assembler.Operands {
             => obj is OperandList && Equals((OperandList) obj);
 
         /// <inheritdoc />
-        protected bool Equals([NotNull] OperandList other) {
-            if (Operands.Count != other.Operands.Count) return false;
-            if (Operands.Count == 0) return true;
-            return Operands.Zip(other.Operands, (x, y) => x.Equals(y))
-                           .Aggregate((x, y) => x && y);
-        }
+        protected bool Equals([NotNull] OperandList other)
+            => Operands.SequenceEqual(other.Operands);
 
         /// <inheritdoc />
         public override int GetHashCode() {

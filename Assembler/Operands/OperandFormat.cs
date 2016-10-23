@@ -24,8 +24,8 @@ namespace Assembler.Operands {
         /// <summary>
         ///     Construct directly from a list of types.
         /// </summary>
-        /// <param name="operand_types"> Must be subclasses of IOperand. </param>
-        /// <exception cref="ArgumentException"> If any type not subclass of IOperand. </exception>
+        /// <param name="operand_types"> Must implement interface IOperand. </param>
+        /// <exception cref="ArgumentException"> If any type does not implement IOperand. </exception>
         [SuppressMessage("ReSharper", "NotNullMemberIsNotInitialized")]
         public OperandFormat([NotNull, ItemNotNull] IReadOnlyCollection<Type> operand_types) {
             if (operand_types.Any(operand_type => !operand_type.GetInterfaces().Contains(typeof(IOperand)))) {
@@ -58,6 +58,6 @@ namespace Assembler.Operands {
 
         /// <inheritdoc />
         public override int GetHashCode()
-            => OperandTypes.GetHashCode();
+            => OperandTypes.Aggregate(0, (a, x) => (a.GetHashCode()*397) ^ x.GetHashCode());
     }
 }
