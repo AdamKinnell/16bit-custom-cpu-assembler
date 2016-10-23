@@ -16,10 +16,6 @@ namespace Assembler.Constants {
 
         private static readonly InstructionRegistry INSTRUCTION_REGISTRY = new InstructionRegistry();
 
-        private static readonly Type REGISTER_TYPE = typeof(RegisterOperand);
-        private static readonly Type IMMEDIATE_TYPE = typeof(ImmediateOperand);
-        private static readonly Type BASEOFFSET_TYPE = typeof(BaseOffsetOperand);
-
         // Static Constructors ////////////////////////////////////////////////
 
         static Instructions() {
@@ -58,11 +54,11 @@ namespace Assembler.Constants {
             // Add RR, RI, and RI(C) formats for each instruction.
             foreach (var pair in alu_instructions) {
                 registry.Register(InstructionFactory.CreateRRStandardInstruction(
-                                      pair.Item1, ALU_RR_OPCODE, pair.Item2)); ///////// ADD $t0, $t1    :=: $t0 += $t1
+                                      pair.Item1, ALU_RR_OPCODE, pair.Item2)); ///////// ADD $t0, $t1     :=: $t0 += $t1
                 registry.Register(InstructionFactory.CreateRIStandardInstruction(
-                                      pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, $t1, 8 :=: $t0 = $t1 + 8
+                                      pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, $t1, 8  :=: $t0 = $t1 + 8
                 registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
-                                      pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, 8      :=: $t0 += 8 
+                                      pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, 8       :=: $t0 += 8 
                 registry.Register(InstructionFactory.CreateRIStandardInstruction(
                                       pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2)); // ADDC $t0, $t1, 8 :=: if(c) $t0 = $t1 + 8
                 registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(

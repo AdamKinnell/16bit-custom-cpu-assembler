@@ -140,15 +140,15 @@ namespace Assembler.Instructions {
             ///     The caller is responsible for ensureing the given operands
             ///     are of the type expected by the mapping.
             /// </summary>
-            [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-            public Int32 AssembleFromOperands([NotNull] OperandList operands)
+            [NotNull, SuppressMessage("ReSharper", "PossibleNullReferenceException")]
+            public MachineCode AssembleFromOperands([NotNull] OperandList operands)
                 => new MachineCodeBuilder()
                     .Opcode(builder.opcode_delegate(operands))
                     .Function(builder.function_delegate(operands))
                     .R1(builder.r1_delegate(operands))
                     .R2(builder.r2_delegate(operands))
                     .Immediate(builder.immediate_delegate(operands))
-                    .BuildAsInt32();
+                    .Build();
         }
     }
 

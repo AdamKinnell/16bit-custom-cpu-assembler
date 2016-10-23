@@ -21,7 +21,8 @@ namespace Assembler.Tests.Instructions {
                                 .R1(ALL_BITS_ONE)
                                 .R2(ALL_BITS_ONE)
                                 .Immediate(ALL_BITS_ONE)
-                                .Build());
+                                .Build()
+                                .AsInteger());
         }
 
         [TestMethod]
@@ -33,7 +34,8 @@ namespace Assembler.Tests.Instructions {
                                 .R1(ALL_BITS_ZERO)
                                 .R2(ALL_BITS_ZERO)
                                 .Immediate(ALL_BITS_ZERO)
-                                .Build());
+                                .Build()
+                                .AsInteger());
         }
 
         [TestMethod]
@@ -48,7 +50,8 @@ namespace Assembler.Tests.Instructions {
                                 .R1(ALL_BITS_ONE)
                                 .R2(ALL_BITS_ZERO)
                                 .Immediate(ALL_BITS_ONE)
-                                .Build());
+                                .Build()
+                                .AsInteger());
         }
 
         [TestMethod]
@@ -63,7 +66,8 @@ namespace Assembler.Tests.Instructions {
                                 .R1(ALL_BITS_ZERO)
                                 .R2(ALL_BITS_ONE)
                                 .Immediate(ALL_BITS_ZERO)
-                                .Build());
+                                .Build()
+                                .AsInteger());
         }
 
         [TestMethod]
@@ -75,7 +79,8 @@ namespace Assembler.Tests.Instructions {
                                 .R1(1)
                                 .R2(1)
                                 .Immediate(1)
-                                .Build());
+                                .Build()
+                                .AsInteger());
         }
     }
 }

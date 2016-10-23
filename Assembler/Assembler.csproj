@@ -53,6 +53,7 @@
     <Compile Include="Constants\Registers.cs" />
     <Compile Include="Instructions\InstructionFactory.cs" />
     <Compile Include="Instructions\InstructionFormat.cs" />
+    <Compile Include="Instructions\MachineCode.cs" />
     <Compile Include="Instructions\NativeInstruction.cs" />
     <Compile Include="Instructions\InstructionFieldMapping.cs" />
     <Compile Include="Instructions\MachineCodeBuilder.cs" />

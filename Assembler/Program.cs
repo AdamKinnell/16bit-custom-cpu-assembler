@@ -54,7 +54,8 @@ namespace Assembler {
         ///     Assemble the given instruction into machine code.
         /// </summary>
         /// <exception cref="ArgumentException"> If the instruction is invalid. </exception>
-        private static Int32 AssembleSourceInstruction([NotNull] SourceInstruction instruction) {
+        [NotNull]
+        private static MachineCode AssembleSourceInstruction([NotNull] SourceInstruction instruction) {
             var registry = Constants.Instructions.GetRegistry();
             var native = registry.Find(instruction.Format);
 
@@ -82,11 +83,8 @@ namespace Assembler {
             // Write machine code.
             using (var writer = new StreamWriter(TEXT_PATH)) {
                 writer.Write("v2.0 raw\r\n");
-                foreach (Int32 word in machine_code) {
-                    var bytes = BitConverter.GetBytes(word);
-                    if (BitConverter.IsLittleEndian) Array.Reverse(bytes);
-
-                    foreach (byte b in bytes)
+                foreach (var instruction in machine_code) {
+                    foreach (byte b in instruction.AsLittleEndianBytes())
                         writer.Write($@"{b:X2}");
                     writer.Write(' ');
                 }

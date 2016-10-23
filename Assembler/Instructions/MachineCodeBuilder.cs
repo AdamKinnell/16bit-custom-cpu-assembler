@@ -124,38 +124,11 @@ namespace Assembler.Instructions {
         ///     Generates the machine code from the values set.
         /// </summary>
         /// <exception cref="InvalidOperationException"> If any of the fields are unspecified. </exception>
-        public Int32 BuildAsInt32() {
+        [NotNull]
+        public MachineCode Build() {
             if (IsValid())
-                return PackAsInt32();
+                return new MachineCode(PackAsInt32());
             else
-                throw new InvalidOperationException("All fields must be specified.");
-        }
-
-        /// <summary>
-        ///     Generates the machine code from the values set.
-        /// </summary>
-        /// <exception cref="InvalidOperationException"> If any of the fields are unspecified. </exception>
-        [NotNull]
-        public byte[] BuildAsLittleEndianBytes() {
-            if (IsValid()) {
-                var bytes = BitConverter.GetBytes(PackAsInt32());
-                if (!BitConverter.IsLittleEndian) Array.Reverse(bytes);
-                return bytes;
-            } else
-                throw new InvalidOperationException("All fields must be specified.");
-        }
-
-        /// <summary>
-        ///     Generates the machine code from the values set.
-        /// </summary>
-        /// <exception cref="InvalidOperationException"> If any of the fields are unspecified. </exception>
-        [NotNull]
-        public byte[] BuildAsBigEndianBytes() {
-            if (IsValid()) {
-                var bytes = BitConverter.GetBytes(PackAsInt32());
-                if (BitConverter.IsLittleEndian) Array.Reverse(bytes);
-                return bytes;
-            } else
                 throw new InvalidOperationException("All fields must be specified.");
         }
     }

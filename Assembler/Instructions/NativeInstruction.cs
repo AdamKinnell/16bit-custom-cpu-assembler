@@ -47,7 +47,8 @@ namespace Assembler.Instructions {
         /// <exception cref="ArgumentException">
         ///     If the format of the operands given is different to the format expected.
         /// </exception>
-        public Int32 AssembleWithOperands([NotNull] OperandList operands) {
+        [NotNull]
+        public MachineCode AssembleWithOperands([NotNull] OperandList operands) {
             if (operands.Format.Equals(Format.OperandFormat))
                 return field_mapping.AssembleFromOperands(operands);
             else
