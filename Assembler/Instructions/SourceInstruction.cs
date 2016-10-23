@@ -14,31 +14,38 @@ namespace Assembler.Instructions {
         // Constructors ///////////////////////////////////////////////////////
 
         /// <summary>
+        ///     Construct from format and operand list.
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        /// If the format of the operands given is different from
+        /// </exception>
+        public SourceInstruction([NotNull] InstructionFormat format, [NotNull] OperandList operands) {
+            if (!format.OperandFormat.Equals(operands.Format))
+                throw new ArgumentException("Operand formats do not match.");
+
+            Format = format;
+            Operands = operands;
+        }
+
+        /// <summary>
         ///     Construct from mnemonic and operand list.
         /// </summary>
-        public SourceInstruction([NotNull] string mnemonic, [CanBeNull] OperandList operands) {
-            Mnemonic = mnemonic;
-            Operands = operands ?? OperandList.CreateEmpty();
-        }
+        public SourceInstruction([NotNull] string mnemonic, [NotNull] OperandList operands)
+            : this(new InstructionFormat(mnemonic, operands.Format), operands) {}
 
         /// <summary>
         ///     Construct from mnemonic and operands.
         /// </summary>
-        public SourceInstruction([NotNull] string mnemonic, [NotNull] params IOperand[] operands) {
-            Mnemonic = mnemonic;
-            Operands = new OperandList(operands);
-        }
+        public SourceInstruction([NotNull] string mnemonic, [NotNull] params IOperand[] operands)
+            : this(mnemonic, new OperandList(operands)) {}
 
         // Properties /////////////////////////////////////////////////////////
 
-        /// <summary> The mnemonic given for this instruction. </summary>
-        [NotNull] public string Mnemonic { get; }
+        /// <summary> The format of this instruction. </summary>
+        [NotNull] public InstructionFormat Format { get; }
 
         /// <summary> The operands given for this instruction. </summary>
         [NotNull] public OperandList Operands { get; }
-
-        /// <summary> </summary>
-        [NotNull] public OperandFormat Format { get; }
 
         // Implemented Functions //////////////////////////////////////////////
 
@@ -48,7 +55,7 @@ namespace Assembler.Instructions {
 
         /// <inheritdoc />
         protected bool Equals([NotNull] SourceInstruction other) =>
-            Equals(Mnemonic, other.Mnemonic) &&
+            Equals(Format, other.Format) &&
             Equals(Operands, other.Operands);
 
         /// <inheritdoc />

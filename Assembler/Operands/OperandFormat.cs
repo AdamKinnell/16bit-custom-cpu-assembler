@@ -18,7 +18,7 @@ namespace Assembler.Operands {
         ///     Construct from a list of operands.
         /// </summary>
         public OperandFormat([NotNull, ItemNotNull] IEnumerable<IOperand> operands) {
-            OperandTypes = operands.Select(operand => operand.GetType());
+            OperandTypes = operands.Select(operand => operand.GetType()).ToList();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Assembler.Operands {
         /// <exception cref="ArgumentException"> If any type not subclass of IOperand. </exception>
         [SuppressMessage("ReSharper", "NotNullMemberIsNotInitialized")]
         public OperandFormat([NotNull, ItemNotNull] IReadOnlyCollection<Type> operand_types) {
-            if (OperandTypes.Any(operand_type => !operand_type.IsSubclassOf(typeof(IOperand)))) {
+            if (operand_types.Any(operand_type => !operand_type.GetInterfaces().Contains(typeof(IOperand)))) {
                 throw new ArgumentException("Not a type of operand.", nameof(operand_types));
             }
             OperandTypes = operand_types;
@@ -44,7 +44,7 @@ namespace Assembler.Operands {
 
         // Properties /////////////////////////////////////////////////////////
 
-        [NotNull, ItemNotNull] public IEnumerable<Type> OperandTypes { get; }
+        [NotNull, ItemNotNull] public IReadOnlyCollection<Type> OperandTypes { get; }
 
         // Implemented Functions //////////////////////////////////////////////
 
@@ -57,8 +57,7 @@ namespace Assembler.Operands {
             => OperandTypes.SequenceEqual(other.OperandTypes);
 
         /// <inheritdoc />
-        public override int GetHashCode() {
-            throw new NotImplementedException();
-        }
+        public override int GetHashCode()
+            => OperandTypes.GetHashCode();
     }
 }

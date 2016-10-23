@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Assembler.Instructions;
 using Assembler.Lexer.Tokenizer;
 using JetBrains.Annotations;
 
@@ -26,7 +28,7 @@ namespace Assembler {
         private static IEnumerable<TokenizedSourceLine> TokenizeLines([NotNull] TextReader input) {
             var lines = new List<TokenizedSourceLine>();
             while (true) {
-                var line = input.ReadLine();
+                string line = input.ReadLine();
                 if (line != null) {
                     var tokenized = new SourceLineTokenizer().TokenizeLine(line);
                     if (tokenized.HasLabel || tokenized.HasInstruction)
@@ -38,7 +40,7 @@ namespace Assembler {
         }
 
         /// <summary>
-        /// 
+        ///     Tokenize all the lines in the file at the specified path.
         /// </summary>
         /// <exception cref="ArgumentException"> If tokenizing fails. </exception>
         [NotNull, ItemNotNull]
@@ -48,6 +50,15 @@ namespace Assembler {
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private static Int32 AssembleSourceInstruction([NotNull] SourceInstruction instruction) {
+            var registry = Constants.Instructions.GetRegistry();
+            var native = registry.Find(instruction.Format);
+            return native.AssembleWithOperands(instruction.Operands);
+        }
+
         // Entry Point ////////////////////////////////////////////////////////
 
         private static void Main([NotNull] string[] args) {
@@ -55,22 +66,23 @@ namespace Assembler {
             // Tokenize lines from source file.
             var lines = TokenizeLinesFromFile(SOURCE_PATH);
 
-            foreach (var line in lines) {
-                if (!line.HasInstruction) continue;
-
-                var registry = Constants.Instructions.GetRegistry();
-                var instruction = registry.Find(line.Instruction);
-            }
-
             // Assemble instructions.
-            // TODO
+            var machine_code = lines
+                .Where(x => x.HasInstruction)
+                .Select(x => AssembleSourceInstruction(x.Instruction));
 
             // Resolve label addresses.
             // TODO
 
             // Write machine code.
-            // TODO
+            using (var file = File.OpenWrite(TEXT_PATH))
+            using (var writer = new BinaryWriter(file)) {
+                foreach (Int32 word in machine_code) {
+                    writer.Write(word);
+                }
+            }
 
+            // Done!
             Console.WriteLine("Goodbye World!");
             Console.ReadKey();
         }

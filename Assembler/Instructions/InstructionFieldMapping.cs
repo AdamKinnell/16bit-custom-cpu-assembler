@@ -136,9 +136,10 @@ namespace Assembler.Instructions {
             /// <summary>
             ///     Using the internal mapping, generate the machine code for
             ///     the instruction with the given operands.
+            /// 
+            ///     The caller is responsible for ensureing the given operands
+            ///     are of the type expected by the mapping.
             /// </summary>
-            /// <param name="operands"> </param>
-            /// <returns> </returns>
             [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
             public Int32 AssembleFromOperands([NotNull] OperandList operands)
                 => new MachineCodeBuilder()

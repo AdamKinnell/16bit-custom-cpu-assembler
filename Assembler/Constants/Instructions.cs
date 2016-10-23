@@ -64,7 +64,7 @@ namespace Assembler.Constants {
         private static NativeInstruction CreateRRInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstruction(
                 mnemonic: mnemonic,
-                format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
+                operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
                 mapping: GetRRBuilder()
                     .Opcode(opcode)
                     .Function(function)
@@ -78,7 +78,7 @@ namespace Assembler.Constants {
         private static NativeInstruction CreateRIInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstruction(
                 mnemonic: mnemonic,
-                format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE, IMMEDIATE_TYPE),
+                operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE, IMMEDIATE_TYPE),
                 mapping: GetRIBuilder()
                     .Opcode(opcode)
                     .Function(function)
@@ -112,7 +112,7 @@ namespace Assembler.Constants {
             foreach (var pair in alu_instructions) {
                 registry.Register(CreateRRInstruction(pair.Item1, ALU_RR_OPCODE, pair.Item2));
                 registry.Register(CreateRIInstruction(pair.Item1, ALU_RI_OPCODE, pair.Item2));
-                registry.Register(CreateRIInstruction(pair.Item1, ALU_RIC_OPCODE, pair.Item2));
+                registry.Register(CreateRIInstruction(pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2));
             }
         }
 
@@ -196,7 +196,7 @@ namespace Assembler.Constants {
             registry.Register(
                 new NativeInstruction(
                     mnemonic: "halt",
-                    format: new OperandFormat(),
+                    operand_format: new OperandFormat(),
                     mapping: new InstructionFieldMappingBuilder()
                         .Opcode(31)
                         .Function(0)
@@ -213,6 +213,7 @@ namespace Assembler.Constants {
         ///     Get the list of all registered instructions
         ///     which are valid for the architecture.
         /// </summary>
+        [NotNull]
         public static InstructionRegistry GetRegistry()
             => INSTRUCTION_REGISTRY;
     }

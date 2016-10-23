@@ -1,4 +1,5 @@
-﻿using Assembler.Operands;
+﻿using System;
+using Assembler.Operands;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {
@@ -11,27 +12,46 @@ namespace Assembler.Instructions {
 
         // Fields /////////////////////////////////////////////////////////////
 
-        [NotNull] private InstructionFieldMappingBuilder.InstructionFieldMapping field_mapping;
+        [NotNull] private readonly InstructionFieldMappingBuilder.InstructionFieldMapping field_mapping;
 
         // Constructors ///////////////////////////////////////////////////////
 
-        public NativeInstruction([NotNull] string mnemonic, [NotNull] OperandFormat format,
+        /// <summary>
+        ///     Construct from mnemonic, operand formats, and mappings.
+        /// </summary>
+        public NativeInstruction([NotNull] string mnemonic, [NotNull] OperandFormat operand_format,
                                  [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
-            Mnemonic = mnemonic;
-            OperandFormat = format;
+            Format = new InstructionFormat(mnemonic, operand_format);
+            field_mapping = mapping;
+        }
+
+        /// <summary>
+        ///     Construct directly from instruction format and mappings.
+        /// </summary>
+        public NativeInstruction([NotNull] InstructionFormat format,
+                                 [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
+            Format = format;
             field_mapping = mapping;
         }
 
         // Properties /////////////////////////////////////////////////////////
 
-        /// <summary> The mnemonic for this instruction. </summary>
-        [NotNull] public string Mnemonic { get; }
-
         /// <summary> The format of this instruction's operands. </summary>
-        [NotNull] public OperandFormat OperandFormat { get; }
-
-        // Implemented Functions //////////////////////////////////////////////
+        [NotNull] public InstructionFormat Format { get; }
 
         // Functions //////////////////////////////////////////////////////////
+
+        /// <summary>
+        ///     Assemble this instruction with the given operands.
+        /// </summary>
+        /// <exception cref="ArgumentException">
+        ///     If the format of the operands given is different to the format expected.
+        /// </exception>
+        public Int32 AssembleWithOperands([NotNull] OperandList operands) {
+            if (operands.Format.Equals(Format.OperandFormat))
+                return field_mapping.AssembleFromOperands(operands);
+            else
+                throw new ArgumentException("The given operands are not in the expected format.");
+        }
     }
 }

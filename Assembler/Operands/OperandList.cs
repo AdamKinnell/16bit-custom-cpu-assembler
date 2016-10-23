@@ -46,7 +46,7 @@ namespace Assembler.Operands {
         // Operator Overloads /////////////////////////////////////////////////
 
         /// <summary>
-        ///     Get the n'th operand in the list.
+        ///     Get the i'th operand in the list.
         /// </summary>
         /// <param name="index"> Starts from 0. </param>
         [CanBeNull] public IOperand this[int index]

@@ -12,8 +12,8 @@ namespace Assembler.Registries {
 
         // Fields /////////////////////////////////////////////////////////////
 
-        private readonly Dictionary<string, NativeInstruction> registry
-            = new Dictionary<string, NativeInstruction>();
+        [NotNull] private readonly Dictionary<InstructionFormat, NativeInstruction> registry
+            = new Dictionary<InstructionFormat, NativeInstruction>();
 
         // Functions //////////////////////////////////////////////////////////
 
@@ -22,15 +22,23 @@ namespace Assembler.Registries {
         /// </summary>
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         public void Register([NotNull] NativeInstruction instruction)
-            => registry.Add(instruction.Mnemonic, instruction);
+            => registry.Add(instruction.Format, instruction);
+
+        /// <summary>
+        ///     Check if an instruction of the given format has been registered.
+        /// </summary>
+        public bool IsRegistered([NotNull] InstructionFormat format)
+            => registry.ContainsKey(format);
 
         /// <summary>
         ///     Find the registered native instruction with the given format.
         /// </summary>
         /// <returns> Null if no instruction of the given format has been registered. </returns>
         [CanBeNull]
-        public NativeInstruction Find([NotNull] SourceInstruction instruction) =>
-            registry.ContainsKey(instruction.Mnemonic)
-                ? registry[instruction.Mnemonic] : null;
+        public NativeInstruction Find([NotNull] InstructionFormat format) {
+            NativeInstruction instruction;
+            registry.TryGetValue(format, out instruction);
+            return instruction;
+        }
     }
 }

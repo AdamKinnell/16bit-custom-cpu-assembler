@@ -1,5 +1,4 @@
-﻿using System;
-using Assembler.Operands;
+﻿using Assembler.Operands;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {
@@ -7,7 +6,7 @@ namespace Assembler.Instructions {
     /// <summary>
     ///     Represents the expected or given format of an instruction.
     /// </summary>
-    class InstructionFormat {
+    public class InstructionFormat {
 
         // Constructors ///////////////////////////////////////////////////////
 
@@ -40,7 +39,10 @@ namespace Assembler.Instructions {
 
         /// <inheritdoc />
         public override int GetHashCode() {
-            throw new NotImplementedException();
+            unchecked {
+                return (Mnemonic.GetHashCode()*397) ^ OperandFormat.GetHashCode();
+            }
         }
+
     }
 }
