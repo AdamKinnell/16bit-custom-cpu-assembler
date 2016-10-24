@@ -51,11 +51,11 @@
     <Compile Include="Constants\Instructions.cs" />
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
-    <Compile Include="Instructions\InstructionFactory.cs" />
+    <Compile Include="Instructions\Definitions\InstructionDefinitionFactory.cs" />
     <Compile Include="Instructions\InstructionFormat.cs" />
     <Compile Include="Instructions\MachineCode.cs" />
-    <Compile Include="Instructions\NativeInstructionDefinition.cs" />
-    <Compile Include="Instructions\InstructionFieldMapping.cs" />
+    <Compile Include="Instructions\Definitions\NativeInstructionDefinition.cs" />
+    <Compile Include="Instructions\Definitions\InstructionFieldMapping.cs" />
     <Compile Include="Instructions\MachineCodeBuilder.cs" />
     <Compile Include="Operands\Types\BaseOffsetOperand.cs" />
     <Compile Include="Instructions\SourceInstruction.cs" />

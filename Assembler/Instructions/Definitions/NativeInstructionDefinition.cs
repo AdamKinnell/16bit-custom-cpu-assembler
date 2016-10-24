@@ -2,7 +2,7 @@
 using Assembler.Operands;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions {
+namespace Assembler.Instructions.Definitions {
 
     /// <summary>
     ///     Defines a native instruction with a name (mnemonic),

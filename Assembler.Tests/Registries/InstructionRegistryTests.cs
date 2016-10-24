@@ -1,5 +1,6 @@
 ﻿using System;
 using Assembler.Instructions;
+using Assembler.Instructions.Definitions;
 using Assembler.Operands;
 using Assembler.Operands.Types;
 using Assembler.Registries;

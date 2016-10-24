@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Assembler.Operands;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions {
+namespace Assembler.Instructions.Definitions {
 
     /// <summary>
     ///     Builds a mapping which generates instruction

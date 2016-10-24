@@ -1,6 +1,5 @@
 ﻿using System;
-using Assembler.Instructions;
-using Assembler.Operands;
+using Assembler.Instructions.Definitions;
 using Assembler.Registries;
 using JetBrains.Annotations;
 
@@ -53,15 +52,15 @@ namespace Assembler.Constants {
 
             // Add RR, RI, and RI(C) formats for each instruction.
             foreach (var pair in alu_instructions) {
-                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
                                       pair.Item1, ALU_RR_OPCODE, pair.Item2)); ///////// ADD $t0, $t1     :=: $t0 += $t1
-                registry.Register(InstructionFactory.CreateRIStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIStandardInstruction(
                                       pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, $t1, 8  :=: $t0 = $t1 + 8
-                registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIImplicitDestinationInstruction(
                                       pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, 8       :=: $t0 += 8 
-                registry.Register(InstructionFactory.CreateRIStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIStandardInstruction(
                                       pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2)); // ADDC $t0, $t1, 8 :=: if(c) $t0 = $t1 + 8
-                registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIImplicitDestinationInstruction(
                                       pair.Item1 + 'c', ALU_RIC_OPCODE, pair.Item2)); // ADDC $t0, 8      :=: if(c) $t0 += 8
             }
         }
@@ -85,11 +84,11 @@ namespace Assembler.Constants {
 
             // Add RR and RI formats for each instruction.
             foreach (var pair in shifter_instructions) {
-                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
                                       pair.Item1, SHIFTER_RR_OPCODE, pair.Item2)); // SLL $t0, $t1    :=: $t0 << $t1
-                registry.Register(InstructionFactory.CreateRIStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIStandardInstruction(
                                       pair.Item1, SHIFTER_RI_OPCODE, pair.Item2)); // SLL $t0, $t1, 8 :=: $t0 = $t1 << 8
-                registry.Register(InstructionFactory.CreateRIImplicitDestinationInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIImplicitDestinationInstruction(
                                       pair.Item1, SHIFTER_RI_OPCODE, pair.Item2)); // SLL $t0, 8      :=: $t0 <<= 8
             }
 
@@ -117,9 +116,9 @@ namespace Assembler.Constants {
 
             // Add RR and RI formats for each instruction.
             foreach (var pair in comparison_instructions) {
-                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
                                       pair.Item1, COMPARATOR_RR_OPCODE, pair.Item2)); // CEQ $t0, $t1 :=: c = ($t0 == $t1)
-                registry.Register(InstructionFactory.CreateRIDestinationUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIDestinationUnusedInstruction(
                                       pair.Item1, COMPARATOR_RI_OPCODE, pair.Item2)); // CEQ $t0, 8   :=: c = ($t0 == 8)
             }
         }
@@ -139,11 +138,11 @@ namespace Assembler.Constants {
 
             // Add Register, Immediate, and BaseOffset formats for each instruction.
             foreach (var pair in memory_load_instructions) {
-                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, $t1       :=: $t0 = *($t1)
-                registry.Register(InstructionFactory.CreateRISourceRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF      :=: $t0 = *(0xFF)
-                registry.Register(InstructionFactory.CreateRIBaseOffsetInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIBaseOffsetInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF($t1) :=: $t0 = *($t1 + 0xFF)
             }
         }
@@ -162,11 +161,11 @@ namespace Assembler.Constants {
 
             // Add Register, Immediate, and BaseOffset formats for each instruction.
             foreach (var pair in memory_store_instructions) {
-                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, $t1       :=: *($t1) = $t0
-                registry.Register(InstructionFactory.CreateRISourceRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF      :=: *(0xFF) = $t0
-                registry.Register(InstructionFactory.CreateRIBaseOffsetInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIBaseOffsetInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF($t1) :=: *($t1 + 0xFF) = $t0
             }
         }
@@ -190,7 +189,7 @@ namespace Assembler.Constants {
         ///     - HALT
         /// </summary>
         private static void RegisterMiscInstructions([NotNull] InstructionRegistry registry) {
-                registry.Register(InstructionFactory.CreateOpcodeOnlyInstruction("halt", 31));
+            registry.Register(InstructionDefinitionFactory.CreateOpcodeOnlyInstruction("halt", 31));
         }
 
         // Functions //////////////////////////////////////////////////////////

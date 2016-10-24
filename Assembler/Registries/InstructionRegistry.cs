@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Assembler.Instructions;
+using Assembler.Instructions.Definitions;
 using JetBrains.Annotations;
 
 namespace Assembler.Registries {

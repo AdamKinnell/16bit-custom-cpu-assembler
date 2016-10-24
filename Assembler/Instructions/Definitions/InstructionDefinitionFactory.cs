@@ -4,12 +4,12 @@ using Assembler.Operands;
 using Assembler.Operands.Types;
 using JetBrains.Annotations;
 
-namespace Assembler.Instructions {
+namespace Assembler.Instructions.Definitions {
 
     /// <summary>
     ///     Contains methods for creating instruction definitions.
     /// </summary>
-    class InstructionFactory {
+    class InstructionDefinitionFactory {
 
         // Static Fields //////////////////////////////////////////////////////
 

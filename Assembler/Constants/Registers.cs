@@ -8,7 +8,7 @@ namespace Assembler.Constants {
         // Enums //////////////////////////////////////////////////////////////
 
         /// <summary>
-        ///     The mappings of register usage convention name to their numbers.
+        ///     The mappings of register usage convention names to their numbers.
         /// </summary>
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         public enum RegisterNumber {
