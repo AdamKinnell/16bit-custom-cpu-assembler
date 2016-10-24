@@ -88,6 +88,30 @@ namespace Assembler.Instructions.Definitions {
 
         /// <summary>
         ///     Create an instruction
+        ///     where the destination register is predefined as {destination}.
+        /// 
+        ///     With Mapping:
+        ///     -   R1  = {destination}
+        ///     -   R2  = First Operand
+        ///     -   IMM = Second Operand
+        /// </summary>
+        [NotNull]
+        public static NativeInstructionDefinition CreateRIDestinationRegisterStaticInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function,
+                                                                                               Registers.RegisterNumber destination)
+            => new NativeInstructionDefinition(
+                mnemonic: mnemonic,
+                operand_format: new OperandFormat(REGISTER_TYPE, IMMEDIATE_TYPE),
+                mapping: new InstructionFieldMappingBuilder()
+                    .R1(ops => (int) destination)
+                    .R2(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                    .Immediate(ops => ((ImmediateOperand) ops[1]).Value)
+                    .Opcode(opcode)
+                    .Function(function)
+                    .Build()
+            );
+
+        /// <summary>
+        ///     Create an instruction
         ///     where the destination register is unused and set to $zero.
         /// 
         ///     With Mapping:
@@ -96,13 +120,27 @@ namespace Assembler.Instructions.Definitions {
         ///     -   IMM = Second Operand
         /// </summary>
         [NotNull]
-        public static NativeInstructionDefinition CreateDestinationRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+        public static NativeInstructionDefinition CreateRIDestinationRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+            => CreateRIDestinationRegisterStaticInstruction(mnemonic, opcode, function, Registers.RegisterNumber.ZERO);
+
+        /// <summary>
+        ///     Create an instruction
+        ///     where the destination register is predefined as {source}.
+        /// 
+        ///     With Mapping:
+        ///     -   R1  = First Operand
+        ///     -   R2  = {source}
+        ///     -   IMM = Second Operand
+        /// </summary>
+        [NotNull]
+        public static NativeInstructionDefinition CreateRISourceRegisterStaticInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function,
+                                                                                          Registers.RegisterNumber source)
             => new NativeInstructionDefinition(
                 mnemonic: mnemonic,
                 operand_format: new OperandFormat(REGISTER_TYPE, IMMEDIATE_TYPE),
                 mapping: new InstructionFieldMappingBuilder()
-                    .R1(ops => (int) Registers.RegisterNumber.ZERO)
-                    .R2(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                    .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                    .R2(ops => (int) source)
                     .Immediate(ops => ((ImmediateOperand) ops[1]).Value)
                     .Opcode(opcode)
                     .Function(function)
@@ -119,18 +157,8 @@ namespace Assembler.Instructions.Definitions {
         ///     -   IMM = Second Operand
         /// </summary>
         [NotNull]
-        public static NativeInstructionDefinition CreateSourceRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
-            => new NativeInstructionDefinition(
-                mnemonic: mnemonic,
-                operand_format: new OperandFormat(REGISTER_TYPE, IMMEDIATE_TYPE),
-                mapping: new InstructionFieldMappingBuilder()
-                    .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
-                    .R2(ops => (int) Registers.RegisterNumber.ZERO)
-                    .Immediate(ops => ((ImmediateOperand) ops[1]).Value)
-                    .Opcode(opcode)
-                    .Function(function)
-                    .Build()
-            );
+        public static NativeInstructionDefinition CreateRISourceRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+            => CreateRISourceRegisterStaticInstruction(mnemonic, opcode, function, Registers.RegisterNumber.ZERO);
 
         /// <summary>
         ///     Create an RI format instruction

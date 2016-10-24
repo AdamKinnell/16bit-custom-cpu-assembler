@@ -120,7 +120,7 @@ namespace Assembler.Constants {
             foreach (var pair in comparison_instructions) {
                 registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, COMPARATOR_RR_OPCODE, pair.Item2)); // CEQ $t0, $t1 :=: c = ($t0 == $t1)
-                registry.Register(InstructionDefinitionFactory.CreateDestinationRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRIDestinationRegisterUnusedInstruction(
                                       pair.Item1, COMPARATOR_RI_OPCODE, pair.Item2)); // CEQ $t0, 8   :=: c = ($t0 == 8)
             }
         }
@@ -142,7 +142,7 @@ namespace Assembler.Constants {
             foreach (var pair in memory_load_instructions) {
                 registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, $t1       :=: $t0 = *($t1)
-                registry.Register(InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF      :=: $t0 = *(0xFF)
                 registry.Register(InstructionDefinitionFactory.CreateBaseOffsetInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF($t1) :=: $t0 = *($t1 + 0xFF)
@@ -165,7 +165,7 @@ namespace Assembler.Constants {
             foreach (var pair in memory_store_instructions) {
                 registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, $t1       :=: *($t1) = $t0
-                registry.Register(InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF      :=: *(0xFF) = $t0
                 registry.Register(InstructionDefinitionFactory.CreateBaseOffsetInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF($t1) :=: *($t1 + 0xFF) = $t0
@@ -179,22 +179,22 @@ namespace Assembler.Constants {
 
             // LI $t0, 8 :=: $t0 = 8
             registry.Register(
-                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                     "li", 1, 2)); // OR $t0, $zero, 8
 
             // LIC $t0, 8 :=: if(c) $t0 = 8
             registry.Register(
-                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                     "lic", 2, 2)); // ORC $t0, $zero, 8
 
             // LA $t0, 8 :=: $t0 = 8
             registry.Register(
-                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                     "la", 1, 2)); // OR $t0, $zero, 8
 
             // LAC $t0, 8 :=: if(c) $t0 = 8
             registry.Register(
-                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
                     "lac", 2, 2)); // ORC $t0, $zero, 8
 
             // MOV $t0, $t1 :=: $t0 = $t1
@@ -212,7 +212,28 @@ namespace Assembler.Constants {
         ///     Register both formats of the JMP/BRC instructions.
         ///     TODO
         /// </summary>
-        private static void RegisterControlTransferPseudoInstructions([NotNull] InstructionRegistry registry) {}
+        private static void RegisterControlTransferPseudoInstructions([NotNull] InstructionRegistry registry) {
+
+            //// JMP 0x8 :=: goto 0x8
+            //registry.Register(
+            //    InstructionDefinitionFactory.CreateRRInstruction(
+            //        "jmp", 1, 2)); // OR $pc, $zero, 0x8
+
+            //// JMP $t0 :=: goto $t0
+            //registry.Register(
+            //    InstructionDefinitionFactory.CreateRRInstruction(
+            //        "jmp", 1, 2)); // OR $pc, $t0, 0
+
+            //// BRC 0x8 :=: if(c) goto 0x8
+            //registry.Register(
+            //    InstructionDefinitionFactory.CreateRRInstruction(
+            //        "brc", 1, 2)); // ORC $pc, $zero, 0x8
+
+            //// BRC $t0 :=: if(c) goto $t0
+            //registry.Register(
+            //    InstructionDefinitionFactory.CreateRRInstruction(
+            //        "brc", 1, 2)); // ORC $pc, $t0, 0
+        }
 
         /// <summary>
         ///     Register the following instructions:
