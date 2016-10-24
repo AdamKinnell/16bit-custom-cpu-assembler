@@ -33,8 +33,8 @@ namespace Assembler.Tests.Registries {
             );
 
         [NotNull]
-        private NativeInstruction GenerateNativeInstruction()
-            => new NativeInstruction(
+        private NativeInstructionDefinition GenerateNativeInstruction()
+            => new NativeInstructionDefinition(
                 GenerateInstructionFormat(),
                 GenerateMockFieldMapping()
             );

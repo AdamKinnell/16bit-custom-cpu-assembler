@@ -5,10 +5,10 @@ using JetBrains.Annotations;
 namespace Assembler.Instructions {
 
     /// <summary>
-    ///     Represents an instruction that can be
-    ///     be natively executed by the architecture.
+    ///     Defines a native instruction with a name (mnemonic),
+    ///     operand format, and a direct mapping to machine code.
     /// </summary>
-    public class NativeInstruction {
+    public class NativeInstructionDefinition {
 
         // Fields /////////////////////////////////////////////////////////////
 
@@ -19,8 +19,8 @@ namespace Assembler.Instructions {
         /// <summary>
         ///     Construct from mnemonic, operand formats, and mappings.
         /// </summary>
-        public NativeInstruction([NotNull] string mnemonic, [NotNull] OperandFormat operand_format,
-                                 [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
+        public NativeInstructionDefinition([NotNull] string mnemonic, [NotNull] OperandFormat operand_format,
+                                           [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
             Format = new InstructionFormat(mnemonic, operand_format);
             field_mapping = mapping;
         }
@@ -28,8 +28,8 @@ namespace Assembler.Instructions {
         /// <summary>
         ///     Construct directly from instruction format and mappings.
         /// </summary>
-        public NativeInstruction([NotNull] InstructionFormat format,
-                                 [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
+        public NativeInstructionDefinition([NotNull] InstructionFormat format,
+                                           [NotNull] InstructionFieldMappingBuilder.InstructionFieldMapping mapping) {
             Format = format;
             field_mapping = mapping;
         }

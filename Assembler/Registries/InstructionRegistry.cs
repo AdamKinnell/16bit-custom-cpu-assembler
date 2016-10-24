@@ -13,37 +13,37 @@ namespace Assembler.Registries {
 
         // Fields /////////////////////////////////////////////////////////////
 
-        [NotNull] private readonly Dictionary<InstructionFormat, NativeInstruction> registry
-            = new Dictionary<InstructionFormat, NativeInstruction>();
+        [NotNull] private readonly Dictionary<InstructionFormat, NativeInstructionDefinition> registry
+            = new Dictionary<InstructionFormat, NativeInstructionDefinition>();
 
         // Functions //////////////////////////////////////////////////////////
 
         /// <summary>
-        ///     Register the given instruction.
+        ///     Register the given instruction_definition.
         /// </summary>
         /// <exception cref="InvalidOperationException"> </exception>
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
-        public void Register([NotNull] NativeInstruction instruction) {
-            if (IsRegistered(instruction.Format))
-                throw new InvalidOperationException("An instruction with this format is already registered.");
-            registry.Add(instruction.Format, instruction);
+        public void Register([NotNull] NativeInstructionDefinition instruction_definition) {
+            if (IsRegistered(instruction_definition.Format))
+                throw new InvalidOperationException("An instruction_definition with this format is already registered.");
+            registry.Add(instruction_definition.Format, instruction_definition);
         }
 
         /// <summary>
-        ///     Check if an instruction of the given format has been registered.
+        ///     Check if an instruction_definition of the given format has been registered.
         /// </summary>
         public bool IsRegistered([NotNull] InstructionFormat format)
             => registry.ContainsKey(format);
 
         /// <summary>
-        ///     Find the registered native instruction with the given format.
+        ///     Find the registered native instruction_definition with the given format.
         /// </summary>
-        /// <returns> Null if no instruction of the given format has been registered. </returns>
+        /// <returns> Null if no instruction_definition of the given format has been registered. </returns>
         [CanBeNull]
-        public NativeInstruction Find([NotNull] InstructionFormat format) {
-            NativeInstruction instruction;
-            registry.TryGetValue(format, out instruction);
-            return instruction;
+        public NativeInstructionDefinition Find([NotNull] InstructionFormat format) {
+            NativeInstructionDefinition instruction_definition;
+            registry.TryGetValue(format, out instruction_definition);
+            return instruction_definition;
         }
     }
 }

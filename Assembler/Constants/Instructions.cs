@@ -1,7 +1,6 @@
 ﻿using System;
 using Assembler.Instructions;
 using Assembler.Operands;
-using Assembler.Operands.Types;
 using Assembler.Registries;
 using JetBrains.Annotations;
 
@@ -22,7 +21,8 @@ namespace Assembler.Constants {
             RegisterALUInstructions(INSTRUCTION_REGISTRY);
             RegisterShifterInstructions(INSTRUCTION_REGISTRY);
             RegisterComparisonInstructions(INSTRUCTION_REGISTRY);
-            RegisterMemoryInstructions(INSTRUCTION_REGISTRY);
+            RegisterMemoryLoadInstructions(INSTRUCTION_REGISTRY);
+            RegisterMemoryStoreInstructions(INSTRUCTION_REGISTRY);
             RegisterDataTransferInstructions(INSTRUCTION_REGISTRY);
             RegisterControlTransferInstructions(INSTRUCTION_REGISTRY);
             RegisterMiscInstructions(INSTRUCTION_REGISTRY);
@@ -118,17 +118,58 @@ namespace Assembler.Constants {
             // Add RR and RI formats for each instruction.
             foreach (var pair in comparison_instructions) {
                 registry.Register(InstructionFactory.CreateRRStandardInstruction(
-                                      pair.Item1, COMPARATOR_RR_OPCODE, pair.Item2));
+                                      pair.Item1, COMPARATOR_RR_OPCODE, pair.Item2)); // CEQ $t0, $t1 :=: c = ($t0 == $t1)
                 registry.Register(InstructionFactory.CreateRIDestinationUnusedInstruction(
-                                      pair.Item1, COMPARATOR_RI_OPCODE, pair.Item2));
+                                      pair.Item1, COMPARATOR_RI_OPCODE, pair.Item2)); // CEQ $t0, 8   :=: c = ($t0 == 8)
             }
         }
 
         /// <summary>
-        ///     Register all 3 formats of the LB/LBU/LH/SB/SH instructions.
-        ///     TODO
+        ///     Register: Register address, Immediate address, and Base-Offset addressing formats of the LB/LBU/LH instructions.
         /// </summary>
-        private static void RegisterMemoryInstructions([NotNull] InstructionRegistry registry) {}
+        private static void RegisterMemoryLoadInstructions([NotNull] InstructionRegistry registry) {
+            const Int32 MEMORY_LOAD_OPCODE = 7;
+
+            Tuple<string, Int32>[] memory_load_instructions = {
+                /* (Mnemonic, Function) */
+                new Tuple<string, Int32>("lb", 3),
+                new Tuple<string, Int32>("lbu", 4),
+                new Tuple<string, Int32>("lh", 1),
+            };
+
+            // Add Register, Immediate, and BaseOffset formats for each instruction.
+            foreach (var pair in memory_load_instructions) {
+                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                                      pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, $t1       :=: $t0 = *($t1)
+                registry.Register(InstructionFactory.CreateRISourceRegisterUnusedInstruction(
+                                      pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF      :=: $t0 = *(0xFF)
+                registry.Register(InstructionFactory.CreateRIBaseOffsetInstruction(
+                                      pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF($t1) :=: $t0 = *($t1 + 0xFF)
+            }
+        }
+
+        /// <summary>
+        ///     Register: Register address, Immediate address, and Base-Offset addressing formats of the SB/SH instructions.
+        /// </summary>
+        private static void RegisterMemoryStoreInstructions([NotNull] InstructionRegistry registry) {
+            const Int32 MEMORY_STORE_OPCODE = 8;
+
+            Tuple<string, Int32>[] memory_store_instructions = {
+                /* (Mnemonic, Function) */
+                new Tuple<string, Int32>("sb", 7),
+                new Tuple<string, Int32>("sh", 6),
+            };
+
+            // Add Register, Immediate, and BaseOffset formats for each instruction.
+            foreach (var pair in memory_store_instructions) {
+                registry.Register(InstructionFactory.CreateRRStandardInstruction(
+                                      pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, $t1       :=: *($t1) = $t0
+                registry.Register(InstructionFactory.CreateRISourceRegisterUnusedInstruction(
+                                      pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF      :=: *(0xFF) = $t0
+                registry.Register(InstructionFactory.CreateRIBaseOffsetInstruction(
+                                      pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF($t1) :=: *($t1 + 0xFF) = $t0
+            }
+        }
 
         /// <summary>
         ///     Register the LI/LIC/LA/LAC/MOV/MOVC instructions.
@@ -149,18 +190,7 @@ namespace Assembler.Constants {
         ///     - HALT
         /// </summary>
         private static void RegisterMiscInstructions([NotNull] InstructionRegistry registry) {
-            registry.Register(
-                new NativeInstruction(
-                    mnemonic: "halt",
-                    operand_format: new OperandFormat(),
-                    mapping: new InstructionFieldMappingBuilder()
-                        .Opcode(31)
-                        .Function(0)
-                        .R1(0)
-                        .R2(0)
-                        .Immediate(0)
-                        .Build())
-            );
+                registry.Register(InstructionFactory.CreateOpcodeOnlyInstruction("halt", 31));
         }
 
         // Functions //////////////////////////////////////////////////////////
