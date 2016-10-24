@@ -1,5 +1,7 @@
 ﻿using System;
 using Assembler.Instructions.Definitions;
+using Assembler.Operands;
+using Assembler.Operands.Types;
 using Assembler.Registries;
 using JetBrains.Annotations;
 
@@ -173,6 +175,16 @@ namespace Assembler.Constants {
         }
 
         /// <summary>
+        ///     Register the following instructions:
+        ///     - HALT
+        /// </summary>
+        private static void RegisterMiscInstructions([NotNull] InstructionRegistry registry) {
+            registry.Register(
+                InstructionDefinitionFactory.CreateOpcodeOnlyInstruction(
+                    "halt", 31));
+        }
+
+        /// <summary>
         ///     Register the LI/LIC/LA/LAC/MOV/MOVC pseudo instructions.
         /// </summary>
         private static void RegisterDataTransferPseudoInstructions([NotNull] InstructionRegistry registry) {
@@ -209,40 +221,48 @@ namespace Assembler.Constants {
         }
 
         /// <summary>
-        ///     Register both formats of the JMP/BRC instructions.
-        ///     TODO
+        ///     Register Register and Immediate formats of the JMP/BRC instructions.
         /// </summary>
         private static void RegisterControlTransferPseudoInstructions([NotNull] InstructionRegistry registry) {
 
-            //// JMP 0x8 :=: goto 0x8
-            //registry.Register(
-            //    InstructionDefinitionFactory.CreateRRInstruction(
-            //        "jmp", 1, 2)); // OR $pc, $zero, 0x8
+            Tuple<string, Int32>[] jump_instructions = {
+                /* (Mnemonic, Opcode) */
+                new Tuple<string, Int32>("jmp", 1), // ALU RI
+                new Tuple<string, Int32>("brc", 2), // ALU RI(C)
+            };
 
-            //// JMP $t0 :=: goto $t0
-            //registry.Register(
-            //    InstructionDefinitionFactory.CreateRRInstruction(
-            //        "jmp", 1, 2)); // OR $pc, $t0, 0
-
-            //// BRC 0x8 :=: if(c) goto 0x8
-            //registry.Register(
-            //    InstructionDefinitionFactory.CreateRRInstruction(
-            //        "brc", 1, 2)); // ORC $pc, $zero, 0x8
-
-            //// BRC $t0 :=: if(c) goto $t0
-            //registry.Register(
-            //    InstructionDefinitionFactory.CreateRRInstruction(
-            //        "brc", 1, 2)); // ORC $pc, $t0, 0
-        }
-
-        /// <summary>
-        ///     Register the following instructions:
-        ///     - HALT
-        /// </summary>
-        private static void RegisterMiscInstructions([NotNull] InstructionRegistry registry) {
-            registry.Register(
-                InstructionDefinitionFactory.CreateOpcodeOnlyInstruction(
-                    "halt", 31));
+            foreach (var pair in jump_instructions) {
+                // Jump to immediate address.
+                // JMP 0x8 :=: goto 0x8
+                // BRC 0x8 :=: if(c) goto 0x8
+                registry.Register(
+                    new NativeInstructionDefinition( // OR/ORC $pc, $zero, 0x8
+                        mnemonic: pair.Item1,
+                        operand_format: new OperandFormat(typeof(ImmediateOperand)),
+                        mapping: new InstructionFieldMappingBuilder()
+                            .R1(ops => (int) Registers.RegisterNumber.PC)
+                            .R2(ops => (int) Registers.RegisterNumber.ZERO)
+                            .Immediate(ops => ((ImmediateOperand) ops[0]).Value)
+                            .Opcode(pair.Item2)
+                            .Function(2)
+                            .Build()
+                    ));
+                // Jump to register address.
+                // JMP $t0 :=: goto $t0
+                // BRC $t0 :=: if(c) goto $t0
+                registry.Register(
+                    new NativeInstructionDefinition( // OR/ORC $pc, $t0, 0
+                        mnemonic: pair.Item1,
+                        operand_format: new OperandFormat(typeof(RegisterOperand)),
+                        mapping: new InstructionFieldMappingBuilder()
+                            .R1(ops => (int) Registers.RegisterNumber.PC)
+                            .R2(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                            .Immediate(0)
+                            .Opcode(pair.Item2)
+                            .Function(2)
+                            .Build()
+                    ));
+            }
         }
 
         // Functions //////////////////////////////////////////////////////////

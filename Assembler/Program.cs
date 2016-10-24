@@ -84,7 +84,7 @@ namespace Assembler {
             using (var writer = new StreamWriter(TEXT_PATH)) {
                 writer.Write("v2.0 raw\r\n");
                 foreach (var instruction in machine_code) {
-                    foreach (byte b in instruction.AsLittleEndianBytes())
+                    foreach (byte b in instruction.AsBigEndianBytes())
                         writer.Write($@"{b:X2}");
                     writer.Write(' ');
                 }
