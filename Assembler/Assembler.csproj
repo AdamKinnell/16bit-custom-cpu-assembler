@@ -51,7 +51,9 @@
     <Compile Include="Constants\Instructions.cs" />
     <Compile Include="Constants\RegexDefinitions.cs" />
     <Compile Include="Constants\Registers.cs" />
+    <Compile Include="Instructions\Definitions\IInstructionDefinition.cs" />
     <Compile Include="Instructions\Definitions\InstructionDefinitionFactory.cs" />
+    <Compile Include="Instructions\Definitions\PseudoInstructionDefinition.cs" />
     <Compile Include="Instructions\InstructionFormat.cs" />
     <Compile Include="Instructions\MachineCode.cs" />
     <Compile Include="Instructions\Definitions\NativeInstructionDefinition.cs" />

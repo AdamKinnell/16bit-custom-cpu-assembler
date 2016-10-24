@@ -59,8 +59,8 @@ namespace Assembler.Tests.Registries {
             => Assert.IsFalse(new InstructionRegistry().IsRegistered(GenerateInstructionFormat()));
 
         [TestMethod]
-        public void GivenUnregisteredInstructionFormat_Find_ReturnsNull()
-            => Assert.IsNull(new InstructionRegistry().Find(GenerateInstructionFormat()));
+        public void GivenUnregisteredInstructionFormat_TryFind_ReturnsNull()
+            => Assert.IsNull(new InstructionRegistry().TryFind(GenerateInstructionFormat()));
 
         [TestMethod]
         public void GivenReferenceEqualRegisteredInstructionFormat_IsRegistered_ReturnsTrue() {

@@ -57,7 +57,7 @@ namespace Assembler {
         [NotNull]
         private static MachineCode AssembleSourceInstruction([NotNull] SourceInstruction instruction) {
             var registry = Constants.Instructions.GetRegistry();
-            var native = registry.Find(instruction.Format);
+            var native = registry.TryFind(instruction.Format);
 
             if (native == null)
                 throw new ArgumentException("No instruction of the given format has been registered.");

@@ -25,10 +25,10 @@ namespace Assembler.Instructions.Definitions {
         ///     With Mapping:
         ///     -   R1  = First Operand
         ///     -   R2  = Second Operand
-        ///     -   IMM = 0
+        ///     -   IMM = Zero
         /// </summary>
         [NotNull]
-        public static NativeInstructionDefinition CreateRRStandardInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+        public static NativeInstructionDefinition CreateRRInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstructionDefinition(
                 mnemonic: mnemonic,
                 operand_format: new OperandFormat(REGISTER_TYPE, REGISTER_TYPE),
@@ -65,29 +65,6 @@ namespace Assembler.Instructions.Definitions {
 
         /// <summary>
         ///     Create an RI format instruction
-        ///     with Source & Immediate specified in base-offset notation.
-        /// 
-        ///     With Mapping:
-        ///     -   R1  = First Operand
-        ///     -   R2  = Base
-        ///     -   IMM = Offset
-        /// </summary>
-        [NotNull]
-        public static NativeInstructionDefinition CreateRIBaseOffsetInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
-            => new NativeInstructionDefinition(
-                mnemonic: mnemonic,
-                operand_format: new OperandFormat(REGISTER_TYPE, BASEOFFSET_TYPE),
-                mapping: new InstructionFieldMappingBuilder()
-                    .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
-                    .R2(ops => (int) ((BaseOffsetOperand) ops[1]).Base.RegisterNumber)
-                    .Immediate(ops => ((BaseOffsetOperand) ops[1]).Offset.Value)
-                    .Opcode(opcode)
-                    .Function(function)
-                    .Build()
-            );
-
-        /// <summary>
-        ///     Create an RI format instruction
         ///     with the destination implicity defined as the first (register) operand.
         /// 
         ///     With Mapping:
@@ -110,7 +87,7 @@ namespace Assembler.Instructions.Definitions {
             );
 
         /// <summary>
-        ///     Create an RI format instruction
+        ///     Create an instruction
         ///     where the destination register is unused and set to $zero.
         /// 
         ///     With Mapping:
@@ -119,7 +96,7 @@ namespace Assembler.Instructions.Definitions {
         ///     -   IMM = Second Operand
         /// </summary>
         [NotNull]
-        public static NativeInstructionDefinition CreateRIDestinationUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+        public static NativeInstructionDefinition CreateDestinationRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstructionDefinition(
                 mnemonic: mnemonic,
                 operand_format: new OperandFormat(REGISTER_TYPE, IMMEDIATE_TYPE),
@@ -133,8 +110,8 @@ namespace Assembler.Instructions.Definitions {
             );
 
         /// <summary>
-        ///     Create an RI format instruction
-        ///     where the source register ($t0) is unused and set to $zero.
+        ///     Create an instruction
+        ///     where the source register is unused and set to $zero.
         /// 
         ///     With Mapping:
         ///     -   R1  = First Operand
@@ -142,7 +119,7 @@ namespace Assembler.Instructions.Definitions {
         ///     -   IMM = Second Operand
         /// </summary>
         [NotNull]
-        public static NativeInstructionDefinition CreateRISourceRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+        public static NativeInstructionDefinition CreateSourceRegisterUnusedInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
             => new NativeInstructionDefinition(
                 mnemonic: mnemonic,
                 operand_format: new OperandFormat(REGISTER_TYPE, IMMEDIATE_TYPE),
@@ -150,6 +127,29 @@ namespace Assembler.Instructions.Definitions {
                     .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
                     .R2(ops => (int) Registers.RegisterNumber.ZERO)
                     .Immediate(ops => ((ImmediateOperand) ops[1]).Value)
+                    .Opcode(opcode)
+                    .Function(function)
+                    .Build()
+            );
+
+        /// <summary>
+        ///     Create an RI format instruction
+        ///     with Source & Immediate specified in base-offset notation.
+        /// 
+        ///     With Mapping:
+        ///     -   R1  = First Operand
+        ///     -   R2  = Base
+        ///     -   IMM = Offset
+        /// </summary>
+        [NotNull]
+        public static NativeInstructionDefinition CreateBaseOffsetInstruction([NotNull] string mnemonic, Int32 opcode, Int32 function)
+            => new NativeInstructionDefinition(
+                mnemonic: mnemonic,
+                operand_format: new OperandFormat(REGISTER_TYPE, BASEOFFSET_TYPE),
+                mapping: new InstructionFieldMappingBuilder()
+                    .R1(ops => (int) ((RegisterOperand) ops[0]).RegisterNumber)
+                    .R2(ops => (int) ((BaseOffsetOperand) ops[1]).Base.RegisterNumber)
+                    .Immediate(ops => ((BaseOffsetOperand) ops[1]).Offset.Value)
                     .Opcode(opcode)
                     .Function(function)
                     .Build()

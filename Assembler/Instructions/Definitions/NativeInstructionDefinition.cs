@@ -8,7 +8,7 @@ namespace Assembler.Instructions.Definitions {
     ///     Defines a native instruction with a name (mnemonic),
     ///     operand format, and a direct mapping to machine code.
     /// </summary>
-    public class NativeInstructionDefinition {
+    public class NativeInstructionDefinition : IInstructionDefinition {
 
         // Fields /////////////////////////////////////////////////////////////
 
@@ -36,8 +36,8 @@ namespace Assembler.Instructions.Definitions {
 
         // Properties /////////////////////////////////////////////////////////
 
-        /// <summary> The format of this instruction's operands. </summary>
-        [NotNull] public InstructionFormat Format { get; }
+        /// <inheritdoc />
+        public InstructionFormat Format { get; }
 
         // Functions //////////////////////////////////////////////////////////
 
@@ -47,8 +47,7 @@ namespace Assembler.Instructions.Definitions {
         /// <exception cref="ArgumentException">
         ///     If the format of the operands given is different to the format expected.
         /// </exception>
-        [NotNull]
-        public MachineCode AssembleWithOperands([NotNull] OperandList operands) {
+        public MachineCode AssembleWithOperands(OperandList operands) {
             if (operands.Format.Equals(Format.OperandFormat))
                 return field_mapping.AssembleFromOperands(operands);
             else

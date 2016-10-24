@@ -1,4 +1,5 @@
-﻿using Assembler.Operands;
+﻿using System;
+using Assembler.Operands;
 using JetBrains.Annotations;
 
 namespace Assembler.Instructions {
@@ -16,6 +17,14 @@ namespace Assembler.Instructions {
         public InstructionFormat([NotNull] string mnemonic, [NotNull] OperandFormat operand_format) {
             Mnemonic = mnemonic;
             OperandFormat = operand_format;
+        }
+
+        /// <summary>
+        ///     Construct from a mnemonic and list of operand types.
+        /// </summary>
+        public InstructionFormat([NotNull] string mnemonic, [NotNull] params Type[] operand_types) {
+            Mnemonic = mnemonic;
+            OperandFormat = new OperandFormat(operand_types);
         }
 
         // Properties /////////////////////////////////////////////////////////

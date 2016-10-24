@@ -17,14 +17,16 @@ namespace Assembler.Constants {
         // Static Constructors ////////////////////////////////////////////////
 
         static Instructions() {
+            // Native
             RegisterALUInstructions(INSTRUCTION_REGISTRY);
             RegisterShifterInstructions(INSTRUCTION_REGISTRY);
             RegisterComparisonInstructions(INSTRUCTION_REGISTRY);
             RegisterMemoryLoadInstructions(INSTRUCTION_REGISTRY);
             RegisterMemoryStoreInstructions(INSTRUCTION_REGISTRY);
-            RegisterDataTransferInstructions(INSTRUCTION_REGISTRY);
-            RegisterControlTransferInstructions(INSTRUCTION_REGISTRY);
             RegisterMiscInstructions(INSTRUCTION_REGISTRY);
+            // Pseudo
+            RegisterDataTransferPseudoInstructions(INSTRUCTION_REGISTRY);
+            RegisterControlTransferPseudoInstructions(INSTRUCTION_REGISTRY);
         }
 
         // Static Functions////////////////////////////////////////////////////
@@ -52,7 +54,7 @@ namespace Assembler.Constants {
 
             // Add RR, RI, and RI(C) formats for each instruction.
             foreach (var pair in alu_instructions) {
-                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, ALU_RR_OPCODE, pair.Item2)); ///////// ADD $t0, $t1     :=: $t0 += $t1
                 registry.Register(InstructionDefinitionFactory.CreateRIStandardInstruction(
                                       pair.Item1, ALU_RI_OPCODE, pair.Item2)); ///////// ADD $t0, $t1, 8  :=: $t0 = $t1 + 8
@@ -84,7 +86,7 @@ namespace Assembler.Constants {
 
             // Add RR and RI formats for each instruction.
             foreach (var pair in shifter_instructions) {
-                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, SHIFTER_RR_OPCODE, pair.Item2)); // SLL $t0, $t1    :=: $t0 << $t1
                 registry.Register(InstructionDefinitionFactory.CreateRIStandardInstruction(
                                       pair.Item1, SHIFTER_RI_OPCODE, pair.Item2)); // SLL $t0, $t1, 8 :=: $t0 = $t1 << 8
@@ -116,9 +118,9 @@ namespace Assembler.Constants {
 
             // Add RR and RI formats for each instruction.
             foreach (var pair in comparison_instructions) {
-                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, COMPARATOR_RR_OPCODE, pair.Item2)); // CEQ $t0, $t1 :=: c = ($t0 == $t1)
-                registry.Register(InstructionDefinitionFactory.CreateRIDestinationUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateDestinationRegisterUnusedInstruction(
                                       pair.Item1, COMPARATOR_RI_OPCODE, pair.Item2)); // CEQ $t0, 8   :=: c = ($t0 == 8)
             }
         }
@@ -138,11 +140,11 @@ namespace Assembler.Constants {
 
             // Add Register, Immediate, and BaseOffset formats for each instruction.
             foreach (var pair in memory_load_instructions) {
-                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, $t1       :=: $t0 = *($t1)
-                registry.Register(InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF      :=: $t0 = *(0xFF)
-                registry.Register(InstructionDefinitionFactory.CreateRIBaseOffsetInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateBaseOffsetInstruction(
                                       pair.Item1, MEMORY_LOAD_OPCODE, pair.Item2)); // LH $t0, 0xFF($t1) :=: $t0 = *($t1 + 0xFF)
             }
         }
@@ -161,35 +163,65 @@ namespace Assembler.Constants {
 
             // Add Register, Immediate, and BaseOffset formats for each instruction.
             foreach (var pair in memory_store_instructions) {
-                registry.Register(InstructionDefinitionFactory.CreateRRStandardInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateRRInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, $t1       :=: *($t1) = $t0
-                registry.Register(InstructionDefinitionFactory.CreateRISourceRegisterUnusedInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF      :=: *(0xFF) = $t0
-                registry.Register(InstructionDefinitionFactory.CreateRIBaseOffsetInstruction(
+                registry.Register(InstructionDefinitionFactory.CreateBaseOffsetInstruction(
                                       pair.Item1, MEMORY_STORE_OPCODE, pair.Item2)); // SH $t0, 0xFF($t1) :=: *($t1 + 0xFF) = $t0
             }
         }
 
         /// <summary>
-        ///     Register the LI/LIC/LA/LAC/MOV/MOVC instructions.
-        ///     TODO
+        ///     Register the LI/LIC/LA/LAC/MOV/MOVC pseudo instructions.
         /// </summary>
-        /// <param name="registry"> </param>
-        private static void RegisterDataTransferInstructions([NotNull] InstructionRegistry registry) {}
+        private static void RegisterDataTransferPseudoInstructions([NotNull] InstructionRegistry registry) {
+
+            // LI $t0, 8 :=: $t0 = 8
+            registry.Register(
+                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                    "li", 1, 2)); // OR $t0, $zero, 8
+
+            // LIC $t0, 8 :=: if(c) $t0 = 8
+            registry.Register(
+                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                    "lic", 2, 2)); // ORC $t0, $zero, 8
+
+            // LA $t0, 8 :=: $t0 = 8
+            registry.Register(
+                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                    "la", 1, 2)); // OR $t0, $zero, 8
+
+            // LAC $t0, 8 :=: if(c) $t0 = 8
+            registry.Register(
+                InstructionDefinitionFactory.CreateSourceRegisterUnusedInstruction(
+                    "lac", 2, 2)); // ORC $t0, $zero, 8
+
+            // MOV $t0, $t1 :=: $t0 = $t1
+            registry.Register(
+                InstructionDefinitionFactory.CreateRRInstruction(
+                    "la", 1, 2)); // OR $t0, $t1, 0
+
+            // MOVC $t0, $t1 :=: if(c) $t0 = $t1
+            registry.Register(
+                InstructionDefinitionFactory.CreateRRInstruction(
+                    "lac", 2, 2)); // ORC $t0, $t1, 0
+        }
 
         /// <summary>
         ///     Register both formats of the JMP/BRC instructions.
         ///     TODO
         /// </summary>
-        /// <param name="registry"> </param>
-        private static void RegisterControlTransferInstructions([NotNull] InstructionRegistry registry) {}
+        private static void RegisterControlTransferPseudoInstructions([NotNull] InstructionRegistry registry) {}
 
         /// <summary>
         ///     Register the following instructions:
         ///     - HALT
         /// </summary>
         private static void RegisterMiscInstructions([NotNull] InstructionRegistry registry) {
-            registry.Register(InstructionDefinitionFactory.CreateOpcodeOnlyInstruction("halt", 31));
+            registry.Register(
+                InstructionDefinitionFactory.CreateOpcodeOnlyInstruction(
+                    "halt", 31));
         }
 
         // Functions //////////////////////////////////////////////////////////
