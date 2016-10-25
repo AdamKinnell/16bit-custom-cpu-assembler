@@ -49,6 +49,22 @@ namespace Assembler.Operands {
         // Implemented Functions //////////////////////////////////////////////
 
         /// <inheritdoc />
+        public override string ToString()
+            => String.Join(
+                ", ",
+                OperandTypes.Select(
+                    type => {
+                        if (type == typeof(RegisterOperand))
+                            return "$REG";
+                        else if (type == typeof(ImmediateOperand))
+                            return "IMM";
+                        else if (type == typeof(BaseOffsetOperand))
+                            return "IMM($REG)";
+                        else
+                            return "unknown";
+                    }));
+
+        /// <inheritdoc />
         public override bool Equals(object obj)
             => obj is OperandFormat && Equals((OperandFormat) obj);
 

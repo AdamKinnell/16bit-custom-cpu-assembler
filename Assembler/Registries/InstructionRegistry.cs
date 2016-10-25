@@ -64,5 +64,12 @@ namespace Assembler.Registries {
             else
                 throw new InvalidOperationException("An instruction defintion of the given format has not been registered.");
         }
+
+        /// <summary>
+        ///     Get an enumeration of all registered instructions.
+        /// </summary>
+        [NotNull, ItemNotNull]
+        public IEnumerable<IInstructionDefinition> GetRegisteredInstructions()
+            => registry.Values;
     }
 }

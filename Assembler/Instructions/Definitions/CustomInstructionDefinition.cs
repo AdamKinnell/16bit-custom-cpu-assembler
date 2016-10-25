@@ -5,10 +5,10 @@ using JetBrains.Annotations;
 namespace Assembler.Instructions.Definitions {
 
     /// <summary>
-    ///     Defines a pseudo instruction with a name (mnemonic),
+    ///     Defines a custom instruction with a name (mnemonic),
     ///     operand format, and delegated assembly logic.
     /// </summary>
-    public class PseudoInstructionDefinition : IInstructionDefinition {
+    public class CustomInstructionDefinition : IInstructionDefinition {
 
         // Fields /////////////////////////////////////////////////////////////
 
@@ -24,7 +24,7 @@ namespace Assembler.Instructions.Definitions {
         ///     A function that will assemble machine code based on a list of operands.
         ///     Must not return null.
         /// </param>
-        public PseudoInstructionDefinition([NotNull] InstructionFormat format,
+        public CustomInstructionDefinition([NotNull] InstructionFormat format,
                                            [NotNull] Func<OperandList, MachineCode> assembler_delegate) {
 
             Format = format;

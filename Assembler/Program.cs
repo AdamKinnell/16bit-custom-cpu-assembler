@@ -7,6 +7,7 @@ using Assembler.Lexer.Tokenizer;
 using JetBrains.Annotations;
 
 namespace Assembler {
+
     class Program {
 
         // Static Fields //////////////////////////////////////////////////////
@@ -20,33 +21,13 @@ namespace Assembler {
         // Functions //////////////////////////////////////////////////////////
 
         /// <summary>
-        ///     Read line-by-line and tokenize each one.
-        ///     Only lines with labels or instructions are returned.
-        /// </summary>
-        /// <exception cref="ArgumentException"> If tokenizing fails. </exception>
-        [NotNull, ItemNotNull]
-        private static IEnumerable<TokenizedSourceLine> TokenizeLines([NotNull] TextReader input) {
-            var lines = new List<TokenizedSourceLine>();
-            while (true) {
-                string line = input.ReadLine();
-                if (line != null) {
-                    var tokenized = new SourceLineTokenizer().TokenizeLine(line);
-                    if (tokenized.HasLabel || tokenized.HasInstruction)
-                        lines.Add(tokenized);
-                } else {
-                    return lines;
-                }
-            }
-        }
-
-        /// <summary>
         ///     Tokenize all the lines in the file at the specified path.
         /// </summary>
         /// <exception cref="ArgumentException"> If tokenizing fails. </exception>
         [NotNull, ItemNotNull]
         private static IEnumerable<TokenizedSourceLine> TokenizeLinesFromFile([NotNull] string path) {
             using (var source_file = File.OpenText(path)) {
-                return TokenizeLines(source_file);
+                return new SourceStreamTokenizer().TokenizeLines(source_file);
             }
         }
 
@@ -63,6 +44,21 @@ namespace Assembler {
                 throw new ArgumentException("No instruction of the given format has been registered.");
             else
                 return native.AssembleWithOperands(instruction.Operands);
+        }
+
+        /// <summary>
+        ///     Print out a list of all instructions that are supported.
+        /// </summary>
+        private static void PrintSupportedInstructions() {
+            var registry = Constants.Instructions.GetRegistry();
+            var instructions = registry.GetRegisteredInstructions();
+
+            var strings = instructions
+                .Select(x => x.Format.ToString())
+                .OrderBy(x => x);
+
+            Console.WriteLine("Supported Instructions:\n");
+            foreach (string s in strings) Console.WriteLine(s);
         }
 
         // Entry Point ////////////////////////////////////////////////////////
@@ -90,6 +86,8 @@ namespace Assembler {
                 }
                 writer.WriteLine();
             }
+
+            PrintSupportedInstructions();
 
             // Done!
             Console.WriteLine("Goodbye World!");

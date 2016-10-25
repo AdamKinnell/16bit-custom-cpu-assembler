@@ -31,7 +31,7 @@ namespace Assembler.Constants {
             RegisterControlTransferPseudoInstructions(INSTRUCTION_REGISTRY);
         }
 
-        // Static Functions////////////////////////////////////////////////////
+        // Static Functions ///////////////////////////////////////////////////
 
         /// <summary>
         ///     Register RR,RI,RI(C) formats of the AND/NAND/OR/NOR/XOR/XNOR/ADD/SUB instructions.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Assembler.Operands;
 using JetBrains.Annotations;
 
@@ -36,6 +37,10 @@ namespace Assembler.Instructions {
         [NotNull] public OperandFormat OperandFormat { get; }
 
         // Implemented Functions //////////////////////////////////////////////
+
+        /// <inheritdoc />
+        public override string ToString()
+            => $@"{Mnemonic} {OperandFormat}";
 
         /// <inheritdoc />
         public override bool Equals(object obj)
