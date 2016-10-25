@@ -83,8 +83,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\source.asm" />
-    <Content Include="Resources\text.txt" />
+    <None Include="Resources\in" />
+    <None Include="Resources\out" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

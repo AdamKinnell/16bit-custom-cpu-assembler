@@ -104,7 +104,7 @@ namespace Assembler.Lexer.Tokenizer {
             if (match.Success) {
                 return CreateSourceLine(match);
             } else {
-                throw new ArgumentException("Line is malformed.", nameof(line));
+                throw new ArgumentException("Line is malformed: " + line, nameof(line));
             }
         }
     }
