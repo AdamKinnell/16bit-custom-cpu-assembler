@@ -10,14 +10,6 @@ namespace Assembler {
 
     class Program {
 
-        // Static Fields //////////////////////////////////////////////////////
-
-        private const string RESOURCE_FOLDER = @"../../Resources/";
-
-        private static readonly string SOURCE_PATH = Path.Combine(RESOURCE_FOLDER, "source.asm");
-        private static readonly string TEXT_PATH = Path.Combine(RESOURCE_FOLDER, "text.txt");
-        private static readonly string DATA_PATH = Path.Combine(RESOURCE_FOLDER, "data.txt");
-
         // Functions //////////////////////////////////////////////////////////
 
         /// <summary>
@@ -41,7 +33,7 @@ namespace Assembler {
             var native = registry.TryFind(instruction.Format);
 
             if (native == null)
-                throw new ArgumentException("Unknown Instruction:" + instruction.Format);
+                throw new ArgumentException("Unknown Instruction: " + instruction.Format);
 
             return native.AssembleWithOperands(instruction.Operands);
         }
