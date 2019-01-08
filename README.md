@@ -1,5 +1,5 @@
 # 16-bit Custom CPU Assembler
-Simple assembler for use with my [16bit-custom-cpu](https://github.com/AdamKinnell/16bit-custom-cpu).
+Simple assembler written in C# for use with my [16bit-custom-cpu](https://github.com/AdamKinnell/16bit-custom-cpu).
 
 ## Usage
 
@@ -14,7 +14,7 @@ Assemble the source code in <source_file_in> and write the machine code to './ou
 > `assemble`  
 >Assemble the source code in './in' and write the machine code to './out'
 
-Each instruction must be on it's own line.
+Each instruction must be on its own line.
 
 ## Unsupported Features
 - Labels & named jumps
