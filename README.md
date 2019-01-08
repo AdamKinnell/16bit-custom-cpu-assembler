@@ -1,5 +1,5 @@
 # 16-bit Custom CPU Assembler
-Simple assembler written in C# for use with my [16bit-custom-cpu](https://github.com/AdamKinnell/16bit-custom-cpu).
+Simple assembler written in C# for use with [16bit-custom-cpu](https://github.com/AdamKinnell/16bit-custom-cpu).
 
 ## Usage
 
